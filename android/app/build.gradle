@@ -1,0 +1,117 @@
+plugins {
+    id "com.android.application"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+//def flutterRoot = localProperties.getProperty('flutter.sdk')
+//if (flutterRoot == null) {
+//    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+//}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+//apply plugin: 'com.android.application'
+//apply plugin: 'kotlin-android'
+//apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+android {
+    namespace "com.bitdatastudio.icms"
+    compileSdkVersion 36
+    ndkVersion "28.2.13676358"
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.bitdatastudio.icms"
+        // You can update the following values to match your application needs.
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+        minSdkVersion 25
+        targetSdkVersion 36
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        resValue "string", "app_name", "Survey Snap"
+    }
+
+    def hasReleaseKeystore = keystorePropertiesFile.exists() && keystoreProperties['storeFile']
+    signingConfigs {
+        release {
+            if (hasReleaseKeystore) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
+        }
+    }
+    buildTypes {
+        release {
+            // Without android/key.properties, sign with the debug key so a local
+            // release APK can still be packaged. Play uploads need the real keystore.
+            signingConfig hasReleaseKeystore ? signingConfigs.release : signingConfigs.debug
+        }
+    }
+
+//    splits {
+//
+//        // Configures multiple APKs based on ABI.
+//        abi {
+//
+//            // Enables building multiple APKs per ABI.
+//            enable true
+//
+//            // By default all ABIs are included, so use reset() and include to specify that we only
+//            // want APKs for x86 and x86_64.
+//
+//            // Resets the list of ABIs that Gradle should create APKs for to none.
+//            reset()
+//
+//            // Specifies a list of ABIs that Gradle should create APKs for.
+//            include "x86", "x86_64", "armeabi", "armeabi-v7a", "arm64-v8a"
+//
+//            // Specifies that we do not want to also generate a universal APK that includes all ABIs.
+//            universalApk false
+//        }
+//    }
+}
+
+flutter {
+    source '../..'
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+}

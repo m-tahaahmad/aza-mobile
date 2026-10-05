@@ -1,0 +1,41 @@
+---
+description: mobile-app folder structure, layering, and development patterns
+alwaysApply: true
+---
+
+# mobile-app architecture
+
+Flutter ICMS app (`icms_app`). Full context in `mobile-app/CLAUDE.md`.
+
+## Layout
+
+```
+lib/
+  main.dart             # app entry point
+  init_app.dart         # startup: restore tenant + cached colors
+  app.dart              # MyApp + MultiProvider
+  Env/env.dart          # compile-time API host
+  Services/TenantConfig/ # runtime tenant + baseUrl
+  constants/            # globals, theme, keys, assets
+  Model/<Feature>/      # DTOs (fromJson/toJson)
+  Services/             # API calls via Api class
+  Providers/            # ChangeNotifier state
+  screens/<Feature>/    # feature UI (*Screen + *UI split for complex flows)
+  components/           # shared widgets
+```
+
+## Data flow
+
+**Screen → Service → Api → Provider → UI**
+
+- **Services** call `Api.*`, return `ApiResponse<T>`, update the matching Provider on success.
+- **Providers** extend `ChangeNotifier`; hold parsed Models, not raw JSON.
+- **Screens** fetch in `initState`, use `Provider.of` / `context.watch` for state.
+- Register new Providers in `app.dart` `MultiProvider`.
+
+## Rules
+
+- Models must not import Flutter widgets or take `BuildContext`.
+- API endpoints are relative paths; `baseUrl` is set by `TenantConfig` from `API_HOST` + saved server name.
+- Reuse `components/` and `ColorConstants` / `AssetConstants` for shared UI.
+- Match existing naming: PascalCase files, feature-grouped folders.

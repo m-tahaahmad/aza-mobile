@@ -1,0 +1,38 @@
+---
+description: API host dart-define and tenant server field usage
+globs: lib/main.dart,lib/Env/**,lib/Services/TenantConfig/**,android/app/build.gradle,.run/**
+alwaysApply: false
+---
+
+# API host & tenant config
+
+No Android product flavors. Tenant is **runtime** via the login **Server** field. See `mobile-app/CLAUDE.md` and `README.md`.
+
+## Run / build
+
+```bash
+# Production API host (default)
+flutter run -t lib/main.dart
+
+# Local backend
+flutter run \
+  --dart-define=API_HOST=http://10.0.2.2:8000 \
+  -t lib/main.dart
+
+flutter build apk --release -t lib/main.dart
+```
+
+## Config chain
+
+`API_HOST` dart-define → `lib/Env/env.dart` (`apiHost`) + login **Server** field → `TenantConfig` → `globals.baseUrl` (`{apiHost}/api/v1/{server}/`).
+
+Use `TenantConfig.getServerName()` / `globals.tenantName` for runtime tenant; do not hardcode tenant slugs.
+
+## Tenant settings
+
+- Fetched **after login** via `SettingService.fetchPublicSettings()`
+- Cached in SharedPreferences (`publicSettings`)
+- Colors applied via `ColorConstants.applyFromPublicSettings()`
+- On cold start: restore cached colors only (no settings API call)
+
+Do not hardcode API URLs outside `env.dart` and `TenantConfig`. Entry point is `lib/main.dart` only.

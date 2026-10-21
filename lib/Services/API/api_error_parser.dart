@@ -13,6 +13,11 @@ class ParsedApiError {
 }
 
 class ApiErrorParser {
+  static const blockedMessage = 'Request blocked. Please try again.';
+  static const unreadableMessage = 'Something went wrong';
+
+  static final RegExp _htmlTag = RegExp(r'<\s*/?\s*[a-zA-Z][^>]*>');
+
   static ParsedApiError parse(dynamic body) {
     if (body == null) {
       return const ParsedApiError(message: 'Request failed');
@@ -28,12 +33,12 @@ class ApiErrorParser {
           json = decoded;
         }
       } catch (_) {
-        return ParsedApiError(message: body);
+        return ParsedApiError(message: messageForUnstructuredBody(body));
       }
     }
 
     if (json == null) {
-      return ParsedApiError(message: body.toString());
+      return ParsedApiError(message: messageForUnstructuredBody(body.toString()));
     }
 
     final error = json['error'];
@@ -54,5 +59,38 @@ class ApiErrorParser {
     }
 
     return const ParsedApiError(message: 'Request failed');
+  }
+
+  /// Replaces HTML (including gateway bot-check pages) with a short message.
+  /// Plain text is left unchanged so snackbars can still show API errors.
+  static String sanitizeForDisplay(String message) {
+    if (!looksLikeHtml(message)) return message;
+    return looksLikeBotChallenge(message) ? blockedMessage : unreadableMessage;
+  }
+
+  static String messageForUnstructuredBody(String body) {
+    final trimmed = body.trim();
+    if (trimmed.isEmpty) return 'Request failed';
+    if (looksLikeHtml(trimmed)) return sanitizeForDisplay(trimmed);
+    if (trimmed.length <= 200) return trimmed;
+    return unreadableMessage;
+  }
+
+  static bool looksLikeHtml(String value) {
+    final lower = value.toLowerCase();
+    if (lower.contains('<!doctype') ||
+        lower.contains('<html') ||
+        lower.contains('<head') ||
+        lower.contains('<body')) {
+      return true;
+    }
+    return _htmlTag.hasMatch(value);
+  }
+
+  static bool looksLikeBotChallenge(String value) {
+    final lower = value.toLowerCase();
+    return lower.contains('recaptcha') ||
+        lower.contains('bot verification') ||
+        lower.contains('cf-challenge');
   }
 }

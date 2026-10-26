@@ -40,6 +40,16 @@ void main() {
     expect(parsed.message, 'Access denied');
     expect(parsed.code, 'ACCESS_DENIED');
     expect(parsed.reason, 'role');
+    expect(
+      ApiErrorParser.displayMessage(parsed),
+      'Access denied Reason: role',
+    );
+  });
+
+  test('displayMessage leaves errors without a reason unchanged', () {
+    const parsed = ParsedApiError(message: 'Username/Password is not correct.');
+
+    expect(ApiErrorParser.displayMessage(parsed), 'Username/Password is not correct.');
   });
 
   test('short plain text is kept', () {

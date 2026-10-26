@@ -244,7 +244,7 @@ class Api {
       if (request.retried) {
         await AuthSessionService.forceLogout();
         final parsed = ApiErrorParser.parse(response.body);
-        throw UnauthorisedException(parsed.message);
+        throw UnauthorisedException(ApiErrorParser.displayMessage(parsed));
       }
 
       final newAccessToken = await _refreshAccessToken();
@@ -267,10 +267,10 @@ class Api {
     final shouldLogout = !_isAuthEndpoint(endpoint) && ApiErrorCodes.isAccessDenied(parsed.code);
 
     if (shouldLogout) {
-      await AuthSessionService.forceLogout(message: parsed.message);
+      await AuthSessionService.forceLogout(message: ApiErrorParser.displayMessage(parsed));
     }
 
-    throw UnautorizationException(parsed.message, code: parsed.code);
+    throw UnautorizationException(ApiErrorParser.displayMessage(parsed), code: parsed.code);
   }
 
   static Future<void> _handleForbiddenFromBody(dynamic body, String endpoint) async {
@@ -278,10 +278,10 @@ class Api {
     final shouldLogout = !_isAuthEndpoint(endpoint) && ApiErrorCodes.isAccessDenied(parsed.code);
 
     if (shouldLogout) {
-      await AuthSessionService.forceLogout(message: parsed.message);
+      await AuthSessionService.forceLogout(message: ApiErrorParser.displayMessage(parsed));
     }
 
-    throw UnautorizationException(parsed.message, code: parsed.code);
+    throw UnautorizationException(ApiErrorParser.displayMessage(parsed), code: parsed.code);
   }
 
   static Future<String> _refreshAccessToken() async {
@@ -351,13 +351,13 @@ class Api {
         throw BadRequestException(parsed.message);
       case 401:
         final parsed = ApiErrorParser.parse(response.body);
-        throw UnauthorisedException(parsed.message);
+        throw UnauthorisedException(ApiErrorParser.displayMessage(parsed));
       case 404:
         final parsed = ApiErrorParser.parse(response.body);
         throw RequestNotFoundException(parsed.message);
       case 403:
         final parsed = ApiErrorParser.parse(response.body);
-        throw UnautorizationException(parsed.message, code: parsed.code);
+        throw UnautorizationException(ApiErrorParser.displayMessage(parsed), code: parsed.code);
       case 408:
         _reportRecorded(ClientErrorKind.timeout, 'Request timed out', 'Request timed out');
         throw RequestTimeOutException('Request timed out');

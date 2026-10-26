@@ -61,6 +61,13 @@ class ApiErrorParser {
     return const ParsedApiError(message: 'Request failed');
   }
 
+  /// User-facing text, including a block reason when the API sends one.
+  static String displayMessage(ParsedApiError parsed) {
+    final reason = parsed.reason?.trim();
+    if (reason == null || reason.isEmpty) return parsed.message;
+    return '${parsed.message} Reason: $reason';
+  }
+
   /// Replaces HTML (including gateway bot-check pages) with a short message.
   /// Plain text is left unchanged so snackbars can still show API errors.
   static String sanitizeForDisplay(String message) {

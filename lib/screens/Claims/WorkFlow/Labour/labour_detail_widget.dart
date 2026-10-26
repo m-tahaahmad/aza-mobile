@@ -4,6 +4,8 @@ import 'package:icms_app/Providers/LabourPartsProvider/labour_parts_provider.dar
 import 'package:icms_app/components/claims/customer_detail_section_card.dart';
 import 'package:provider/provider.dart';
 
+import 'package:icms_app/utils/json_values.dart';
+
 import '../../../../constants/globals.dart';
 
 bool labourFieldsReadOnly() {
@@ -58,11 +60,11 @@ class _LabourDetailWidgetState extends State<LabourDetailWidget> {
       setState(() => _settledError = null);
       return;
     }
-    final settled = num.tryParse(value);
-    final demand = num.tryParse(
-      labourPartProvider.demandController.text.isNotEmpty
-          ? labourPartProvider.demandController.text
-          : '0',
+    final settled = readNum(value, field: 'settled', report: false);
+    final demand = readNum(
+      labourPartProvider.demandController.text.isNotEmpty ? labourPartProvider.demandController.text : '0',
+      field: 'demand',
+      report: false,
     );
     if (settled == null || demand == null || settled > demand) {
       setState(() => _settledError = 'Value cannot be greater than Demand');

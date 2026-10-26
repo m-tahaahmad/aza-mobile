@@ -3,7 +3,7 @@ import 'package:icms_app/screens/Claims/WorkFlow/TakePictures/take_pictures_ui.d
 import '../../../../Model/CustomersDataModel/customer_detail_response_model.dart';
 import '../../../../Services/API/api_response.dart';
 import '../../../../Services/CustomerDetailServices/customer_detail_service.dart';
-import '../../../../components/app_loader.dart';
+import '../../../../components/workflow/workflow_async_body.dart';
 import '../../../../constants/globals.dart';
 
 class TakePicturesScreen extends StatefulWidget {
@@ -39,11 +39,11 @@ class _TakePicturesScreenState extends State<TakePicturesScreen> {
         body: FutureBuilder<ApiResponse<dynamic>?>(
             future: _getCustomerDetails,
             builder: (context, AsyncSnapshot<ApiResponse<dynamic>?> snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(child: AppLoader());
-              } else {
-                return const PicturesUI();
-              }
+              return workflowAsyncBody(
+                snapshot: snapshot,
+                fallback: 'Failed to load pictures.',
+                ready: () => const PicturesUI(),
+              );
             }),
       ),
     );

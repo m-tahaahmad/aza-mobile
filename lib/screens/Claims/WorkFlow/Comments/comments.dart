@@ -16,9 +16,8 @@ import '../../../../Providers/WorkflowProvider/workflow_provider.dart';
 import '../../../../Services/API/api_response.dart';
 import '../../../../Services/CustomerDetailServices/customer_detail_service.dart';
 import '../../../../Services/CustomerDetailServices/update_single_customer.dart';
-import '../../../../components/app_loader.dart';
+import '../../../../components/workflow/workflow_async_body.dart';
 import '../../../../constants/theme_constants.dart';
-import '../../../../constants/font_sizes.dart';
 import '../../../../constants/globals.dart';
 
 class CommentScreen extends StatefulWidget {
@@ -136,35 +135,17 @@ class _CommentScreenState extends State<CommentScreen> {
         body: FutureBuilder<ApiResponse<dynamic>?>(
           future: _getCustomerDetails,
           builder: (context, AsyncSnapshot<ApiResponse<dynamic>?> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: AppLoader());
-            }
-
-            final response = snapshot.data;
-            if (response?.status != Status.completed) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    response?.message ?? 'Failed to load comments.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: FontSizes.normalText1,
-                      color: const Color(0xFF667085),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              );
-            }
+            final gate = workflowAsyncGate(
+              snapshot: snapshot,
+              fallback: 'Failed to load comments.',
+            );
+            if (gate != null) return gate;
 
             return Consumer2<CustomerDetailProvider, WorkflowProvider>(
               builder: (context, customerDetailProvider, workflowProvider, child) {
                 final customerDetailData = customerDetailProvider.customerDetailResponseModel?.data;
                 if (customerDetailData == null) {
-                  return const SafeArea(
-                    child: Center(child: Text('Failed to load comments.')),
-                  );
+                  return workflowLoadMessage('Failed to load comments.');
                 }
 
                 final commentsList = customerDetailData.comments ?? [];

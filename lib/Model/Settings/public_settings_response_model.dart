@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class PublicSettingsResponseModel {
   bool? success;
   PublicSettingsData? data;
@@ -40,11 +42,11 @@ class PublicSettingsData {
   });
 
   PublicSettingsData.fromJson(Map<String, dynamic> json) {
-    logoUrl = json['logo_url'];
-    primaryColor = json['primary_color'];
-    secondaryColor = json['secondary_color'];
-    claimDetailBgColor = json['claim_detail_bg_color'];
-    organizationName = json['organization_name'];
+    logoUrl = readString(json['logo_url']);
+    primaryColor = readString(json['primary_color']);
+    secondaryColor = readString(json['secondary_color']);
+    claimDetailBgColor = readString(json['claim_detail_bg_color']);
+    organizationName = readString(json['organization_name']);
     claimStageColors = json['claim_stage_colors'] != null
         ? ClaimStageColors.fromJson(json['claim_stage_colors'])
         : null;
@@ -95,9 +97,9 @@ class ClaimStage {
   ClaimStage({this.key, this.label, this.color});
 
   ClaimStage.fromJson(Map<String, dynamic> json) {
-    key = json['key'];
-    label = json['label'];
-    color = json['color'];
+    key = readString(json['key']);
+    label = readString(json['label']);
+    color = readString(json['color']);
   }
 
   Map<String, dynamic> toJson() {

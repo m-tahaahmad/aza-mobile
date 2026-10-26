@@ -14,6 +14,8 @@ import '../../components/custom_filled_button.dart';
 import '../../components/custom_snack_bar.dart';
 import '../../constants/theme_constants.dart';
 import '../../constants/font_sizes.dart';
+import 'package:icms_app/utils/json_values.dart';
+
 import '../../constants/globals.dart';
 
 class NotificationClaimBottomSheet extends StatefulWidget {
@@ -29,13 +31,19 @@ class NotificationClaimBottomSheet extends StatefulWidget {
 
 class _NotificationClaimBottomSheetState extends State<NotificationClaimBottomSheet> {
   Future<ApiResponse<CustomerDetailResponseModel>?>? _getCustomerDetails;
+  String? _idError;
 
   @override
   void initState() {
     super.initState();
     debugPrint("ClaimId :: ${widget.claimId}");
     if (widget.claimId != null) {
-      _getCustomerDetails = CustomerDetailService().getCustomerDetail(context, int.parse(widget.claimId!));
+      final id = readId(widget.claimId, field: 'claim_id');
+      if (id == null) {
+        _idError = takeUnparsedNumberMessage() ?? 'Could not read claim id.';
+      } else {
+        _getCustomerDetails = CustomerDetailService().getCustomerDetail(context, id);
+      }
     }
   }
 
@@ -60,14 +68,19 @@ class _NotificationClaimBottomSheetState extends State<NotificationClaimBottomSh
             ),
           ),
           widget.claimId != null
-              ? FutureBuilder<ApiResponse<CustomerDetailResponseModel>?>(
+              ? _idError != null
+                  ? Center(child: Text(_idError!))
+                  : FutureBuilder<ApiResponse<CustomerDetailResponseModel>?>(
                   future: _getCustomerDetails,
                   builder: (context, AsyncSnapshot<ApiResponse<CustomerDetailResponseModel>?> snapshot) {
+                    if (snapshot.hasError || (snapshot.connectionState == ConnectionState.done && snapshot.data?.status == Status.error)) {
+                      return Center(child: Text(snapshot.data?.message ?? 'Failed to load claim details.'));
+                    }
                     if (!snapshot.hasData) {
                       return const Center(child: AppLoader());
                     } else {
                       return Consumer<CustomerDetailProvider>(builder: (context, customerDetailProvider, child) {
-                        CustomerDetailData? customerDetailData = customerDetailProvider.customerDetailResponseModel!.data;
+                        CustomerDetailData? customerDetailData = customerDetailProvider.customerDetailResponseModel?.data;
                         return customerDetailData != null
                             ? customerDetailData.surveyorId == null
                                 ? Column(

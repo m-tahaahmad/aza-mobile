@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class WorkflowResponseModel {
   WorkflowData? data;
 
@@ -41,16 +43,16 @@ class WorkflowData {
       this.isReInspComment});
 
   WorkflowData.fromJson(Map<String, dynamic> json) {
-    isCustomer = json['is_customer'];
-    isDriver = json['is_driver'];
-    isFirstInspPics = json['is_first_insp_pics'];
-    isReInspPics = json['is_re_insp_pics'];
-    isLabor = json['is_labor'];
-    isParts = json['is_parts'];
-    isFirstInspDocs = json['is_first_insp_docs'];
-    isReInspDocs = json['is_re_insp_docs'];
-    isComments = json['is_comments'];
-    isReInspComment = json['is_re_insp_comment'];
+    isCustomer = readInt(json['is_customer'], field: 'is_customer');
+    isDriver = readInt(json['is_driver'], field: 'is_driver');
+    isFirstInspPics = readInt(json['is_first_insp_pics'], field: 'is_first_insp_pics');
+    isReInspPics = readInt(json['is_re_insp_pics'], field: 'is_re_insp_pics');
+    isLabor = readInt(json['is_labor'], field: 'is_labor');
+    isParts = readInt(json['is_parts'], field: 'is_parts');
+    isFirstInspDocs = readInt(json['is_first_insp_docs'], field: 'is_first_insp_docs');
+    isReInspDocs = readInt(json['is_re_insp_docs'], field: 'is_re_insp_docs');
+    isComments = readInt(json['is_comments'], field: 'is_comments');
+    isReInspComment = readInt(json['is_re_insp_comment'], field: 'is_re_insp_comment');
   }
 
   Map<String, dynamic> toJson() {

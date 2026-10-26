@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class DashboardResponseModel {
   bool? success;
   DashboardData? data;
@@ -47,16 +49,16 @@ class DashboardData {
       this.monthlyReports});
 
   DashboardData.fromJson(Map<String, dynamic> json) {
-    user = json['user'];
-    acknwldge = json['new'];
-    fInsp = json['f_insp'];
-    approval = json['approval'];
-    rejected = json['rejected'];
-    reInsp = json['re_insp'];
-    finalStage = json['final'];
-    docs = json['docs'];
-    reports = json['reports'];
-    monthlyReports = json['monthly_reports'];
+    user = readString(json['user']);
+    acknwldge = readInt(json['new'], field: 'new');
+    fInsp = readInt(json['f_insp'], field: 'f_insp');
+    approval = readInt(json['approval'], field: 'approval');
+    rejected = readInt(json['rejected'], field: 'rejected');
+    reInsp = readInt(json['re_insp'], field: 're_insp');
+    finalStage = readInt(json['final'], field: 'final');
+    docs = readInt(json['docs'], field: 'docs');
+    reports = readInt(json['reports'], field: 'reports');
+    monthlyReports = readInt(json['monthly_reports'], field: 'monthly_reports');
   }
 
   Map<String, dynamic> toJson() {
@@ -81,7 +83,7 @@ class Error {
   Error({this.message});
 
   Error.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
+    message = readString(json['message']);
   }
 
   Map<String, dynamic> toJson() {

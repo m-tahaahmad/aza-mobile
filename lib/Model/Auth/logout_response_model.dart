@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class LogoutResponseModel {
   bool? success;
   String? data;
@@ -7,7 +9,7 @@ class LogoutResponseModel {
 
   LogoutResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'];
+    data = readString(json['data']);
     error = json['error'];
   }
 

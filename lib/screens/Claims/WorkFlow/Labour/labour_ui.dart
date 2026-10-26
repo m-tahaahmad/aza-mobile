@@ -17,6 +17,8 @@ import 'package:icms_app/components/labour/labour_parts_section.dart';
 import 'package:icms_app/components/workflow/workflow_page_header.dart';
 import 'package:icms_app/Model/LabourParts/plr_labour_request_model.dart' as plr;
 
+import 'package:icms_app/utils/json_values.dart';
+
 import '../../../../constants/globals.dart';
 import 'labour_detail_widget.dart';
 
@@ -140,17 +142,30 @@ class _LabourUIState extends State<LabourUI> {
     );
   }
 
+  int? _labourAmount(String text, String field) {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return 0;
+    return readInt(trimmed, field: field);
+  }
+
   saveLaborParts({bool isDone = false, bool isThirdParty = false}) {
+    final demand = _labourAmount(labourPartProvider.demandController.text, 'demand');
+    final settled = _labourAmount(labourPartProvider.settledController.text, 'settled');
+    final tax = _labourAmount(labourPartProvider.taxController.text, 'tax');
+    if (demand == null || settled == null || tax == null) {
+      showSnackBar(context, 'Enter a valid number');
+      return;
+    }
+
     dynamic requestModel;
     plrLaboursList = [];
     setState(() {
       isLoading = true;
     });
-    if (labourPartProvider.settledController.text != '' && labourPartProvider.taxController.text != '') {
-      plrTaxAmount =
-          int.parse(labourPartProvider.taxController.text) / 100 * int.parse(labourPartProvider.settledController.text);
-
-      plrGrossAmount = plrTaxAmount + int.parse(labourPartProvider.settledController.text);
+    if (labourPartProvider.settledController.text.trim().isNotEmpty &&
+        labourPartProvider.taxController.text.trim().isNotEmpty) {
+      plrTaxAmount = tax / 100 * settled;
+      plrGrossAmount = plrTaxAmount + settled;
     }
 
     for (var element in labourPartProvider.selectedParts) {
@@ -172,12 +187,8 @@ class _LabourUIState extends State<LabourUI> {
         data: ThirdPartyLaborUpdateData(
           thirdPartyDetail: ThirdPartyLaborDetail(
             claimId: claimId,
-            agreedLabor: labourPartProvider.settledController.text != ''
-                ? int.parse(labourPartProvider.settledController.text)
-                : 0,
-            taxRate: labourPartProvider.taxController.text != ''
-                ? int.parse(labourPartProvider.taxController.text)
-                : 0,
+            agreedLabor: settled,
+            taxRate: tax,
             taxAmount: plrTaxAmount.toInt(),
             grossAmount: plrGrossAmount.toInt(),
           ),
@@ -187,15 +198,9 @@ class _LabourUIState extends State<LabourUI> {
     } else if (HelperFunctions().usePlrAttributes()) {
       requestModel = plr.PLRLabourRequestModel(
         data: plr.PLRLabourRequestData(
-          plrDemandLabour: labourPartProvider.demandController.text != ''
-              ? int.parse(labourPartProvider.demandController.text)
-              : 0,
-          plrAgreedLabour: labourPartProvider.settledController.text != ''
-              ? int.parse(labourPartProvider.settledController.text)
-              : 0,
-          plrTaxRate: labourPartProvider.taxController.text != ''
-              ? int.parse(labourPartProvider.taxController.text)
-              : 0,
+          plrDemandLabour: demand,
+          plrAgreedLabour: settled,
+          plrTaxRate: tax,
           plrTaxAmount: plrTaxAmount.toInt(),
           plrGrossAmount: plrGrossAmount.toInt(),
           plrLabours: plrLaboursList,
@@ -204,15 +209,9 @@ class _LabourUIState extends State<LabourUI> {
     } else {
       requestModel = LabourRequestModel(
         data: LabourRequestData(
-          plrDemandLabour: labourPartProvider.demandController.text != ''
-              ? int.parse(labourPartProvider.demandController.text)
-              : 0,
-          agreedLabour: labourPartProvider.settledController.text != ''
-              ? int.parse(labourPartProvider.settledController.text)
-              : 0,
-          taxRate: labourPartProvider.taxController.text != ''
-              ? int.parse(labourPartProvider.taxController.text)
-              : 0,
+          plrDemandLabour: demand,
+          agreedLabour: settled,
+          taxRate: tax,
           taxAmount: plrTaxAmount.toInt(),
           grossAmount: plrGrossAmount.toInt(),
           labours: plrLaboursList,

@@ -10,6 +10,8 @@ import '../../Services/DashboardService/dashboard_service.dart';
 import '../../components/app_loader.dart';
 import '../../components/dashboard/dashboard_stage_colors.dart';
 import '../../components/dashboard/dashboard_stat_card.dart';
+import 'package:icms_app/utils/json_values.dart';
+
 import '../../constants/globals.dart';
 import '../Claims/pending_claims.dart';
 
@@ -23,15 +25,27 @@ class PreInspectionDashboard extends StatefulWidget {
 class _PreInspectionDashboardState extends State<PreInspectionDashboard> with AutomaticKeepAliveClientMixin {
   Future<ApiResponse<PreInspectionDashboardResponseModel>>? _getDashboard;
   bool isLoading = false;
+  String? _idError;
+
+  void _loadDashboard() {
+    final id = readId(userId, field: 'user_id');
+    if (id == null) {
+      _idError = takeUnparsedNumberMessage() ?? 'Could not read user id.';
+      _getDashboard = null;
+      return;
+    }
+    _idError = null;
+    _getDashboard = DashBoardService().getPreInspectDashboard(context, id);
+  }
 
   @override
   void initState() {
     super.initState();
-    _getDashboard = DashBoardService().getPreInspectDashboard(context, int.parse(userId!));
+    _loadDashboard();
   }
 
   Future _handleRefresh() async {
-    _getDashboard = DashBoardService().getPreInspectDashboard(context, int.parse(userId!));
+    _loadDashboard();
     await Future.delayed(const Duration(milliseconds: 1500));
     return _getDashboard;
   }
@@ -64,6 +78,9 @@ class _PreInspectionDashboardState extends State<PreInspectionDashboard> with Au
       child: FutureBuilder<ApiResponse<PreInspectionDashboardResponseModel>>(
         future: _getDashboard,
         builder: (context, snapshot) {
+          if (_idError != null) {
+            return Center(child: Text(_idError!));
+          }
           if (!snapshot.hasData) {
             return const Center(child: AppLoader());
           }

@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class AllWorkshopsModel {
   bool? success;
   List<WorkshopsData>? data;
@@ -36,10 +38,10 @@ class WorkshopsData {
   WorkshopsData({this.id, this.name, this.createdAt, this.updatedAt});
 
   WorkshopsData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {

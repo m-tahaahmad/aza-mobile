@@ -5,9 +5,8 @@ import '../../../../Model/CustomersDataModel/customer_detail_response_model.dart
 import '../../../../Services/API/api_response.dart';
 import '../../../../Services/CustomerDetailServices/customer_detail_service.dart';
 import '../../../../Services/PartsService/parts_service.dart';
-import '../../../../components/app_loader.dart';
+import '../../../../components/workflow/workflow_async_body.dart';
 import '../../../../constants/theme_constants.dart';
-import '../../../../constants/font_sizes.dart';
 
 class LabourScreen extends StatefulWidget {
   final int? id;
@@ -50,37 +49,13 @@ class _LabourScreenState extends State<LabourScreen> {
         body: FutureBuilder<List<ApiResponse<dynamic>?>>(
           future: apisList,
           builder: (context, AsyncSnapshot<List<ApiResponse<dynamic>?>> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: AppLoader());
-            }
-
-            final results = snapshot.data!;
-            final allCompleted = results.every((response) => response?.status == Status.completed);
-            if (!allCompleted) {
-              final message = results
-                  .where((response) => response?.status == Status.error)
-                  .map((response) => response?.message)
-                  .whereType<String>()
-                  .firstOrNull;
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    message ?? 'Failed to load labour details.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: FontSizes.normalText1,
-                      color: const Color(0xFF667085),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              );
-            }
-
-            return LabourUI(
-              id: widget.id,
-              comeFromThirdParty: widget.comeFromThirdParty,
+            return workflowAsyncBody(
+              snapshot: snapshot,
+              fallback: 'Failed to load labour details.',
+              ready: () => LabourUI(
+                id: widget.id,
+                comeFromThirdParty: widget.comeFromThirdParty,
+              ),
             );
           },
         ),

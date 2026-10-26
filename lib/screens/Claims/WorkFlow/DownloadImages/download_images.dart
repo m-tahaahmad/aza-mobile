@@ -4,7 +4,7 @@ import 'package:icms_app/Services/DownloadImagesServices/download_images_service
 import 'package:icms_app/constants/theme_constants.dart';
 import 'package:icms_app/screens/Claims/WorkFlow/DownloadImages/download_images_ui.dart';
 import '../../../../Services/API/api_response.dart';
-import '../../../../components/app_loader.dart';
+import '../../../../components/workflow/workflow_async_body.dart';
 
 class DownloadImagesScreen extends StatefulWidget {
   final int? id;
@@ -49,11 +49,11 @@ class _DownloadImagesScreenState extends State<DownloadImagesScreen> {
         body: FutureBuilder<ApiResponse<dynamic>?>(
             future: getImages,
             builder: (context, AsyncSnapshot<ApiResponse<dynamic>?> snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(child: AppLoader());
-              } else {
-                return const DownloadImagesUI();
-              }
+              return workflowAsyncBody(
+                snapshot: snapshot,
+                fallback: 'Failed to load images.',
+                ready: () => const DownloadImagesUI(),
+              );
             }),
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class ErrorModel {
   String? message;
   String? code;
@@ -6,9 +8,9 @@ class ErrorModel {
   ErrorModel({this.message, this.code, this.reason});
 
   ErrorModel.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    code = json['code'];
-    reason = json['reason'];
+    message = readString(json['message']);
+    code = readString(json['code']);
+    reason = readString(json['reason']);
   }
 
   Map<String, dynamic> toJson() {

@@ -1,4 +1,5 @@
 import 'error_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class ResponseModel {
   bool? success;
@@ -9,7 +10,7 @@ class ResponseModel {
 
   ResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'];
+    data = readString(json['data']);
     error = json['error'] != null ? ErrorModel.fromJson(json['error']) : null;
   }
 

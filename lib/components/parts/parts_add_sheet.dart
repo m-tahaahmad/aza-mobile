@@ -11,6 +11,7 @@ import 'package:icms_app/components/custom_snack_bar.dart';
 import 'package:icms_app/components/parts/parts_helpers.dart';
 import 'package:icms_app/constants/theme_constants.dart';
 import 'package:icms_app/constants/font_sizes.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class PartsAddSheet extends StatefulWidget {
   final PartsInvolveProvider provider;
@@ -150,6 +151,12 @@ class _PartsAddSheetState extends State<PartsAddSheet> {
     _partDropdownKey.currentState?.popupValidate([created]);
   }
 
+  int? _optionalAmount(String text, String field) {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return 0;
+    return readInt(trimmed, field: field);
+  }
+
   void _save() {
     final provider = widget.provider;
     if (provider.selectedItem == null ||
@@ -159,54 +166,45 @@ class _PartsAddSheetState extends State<PartsAddSheet> {
       return;
     }
 
+    final depText = provider.partDepController.text;
+    final salvageText = provider.salvageController.text;
+    final dep = _optionalAmount(depText, 'dep');
+    final salvage = _optionalAmount(salvageText, 'salvage');
+    final gst = _optionalAmount(provider.gstController.text, 'gst');
+    final price = _optionalAmount(provider.partPriceController.text, 'price');
+    if (dep == null || salvage == null || gst == null || price == null) {
+      showSnackBar(context, 'Enter a valid number');
+      return;
+    }
+
+    final depPercent = _selectedDep == 'Percentage' && depText.trim().isNotEmpty ? dep : 0;
+    final depPrice = _selectedDep == 'Price' && depText.trim().isNotEmpty ? dep : 0;
+    final salPercent = _selectedSalvage == 'Percentage' && salvageText.trim().isNotEmpty ? salvage : 0;
+    final salPrice = _selectedSalvage == 'Price' && salvageText.trim().isNotEmpty ? salvage : 0;
+
     final subtotal = provider.calculateSubtotal(
-      dep: _selectedDep == 'Percentage' && provider.partDepController.text.isNotEmpty
-          ? int.parse(provider.partDepController.text.trim())
-          : 0,
-      depPrice: _selectedDep == 'Price' && provider.partDepController.text.isNotEmpty
-          ? int.parse(provider.partDepController.text.trim())
-          : 0,
-      sal: _selectedSalvage == 'Percentage' && provider.salvageController.text.trim().isNotEmpty
-          ? int.parse(provider.salvageController.text.trim())
-          : 0,
-      salPrice: _selectedSalvage == 'Price' && provider.salvageController.text.trim().isNotEmpty
-          ? int.parse(provider.salvageController.text.trim())
-          : 0,
-      gst: provider.gstController.text.isNotEmpty ? int.parse(provider.gstController.text.trim()) : 0,
-      price: provider.partPriceController.text.isNotEmpty ? int.parse(provider.partPriceController.text.trim()) : 0,
+      dep: depPercent,
+      depPrice: depPrice,
+      sal: salPercent,
+      salPrice: salPrice,
+      gst: gst,
+      price: price,
       subtotal: 0,
     );
 
     final partCondition = partsConditionValue(_selectedCondition);
-    final gstPrice = provider.calculatePartGst(
-      provider.partPriceController.text.isNotEmpty ? int.parse(provider.partPriceController.text.trim()) : 0,
-      _selectedDep == 'Percentage' && provider.partDepController.text.trim().isNotEmpty
-          ? int.parse(provider.partDepController.text.trim())
-          : 0,
-      _selectedDep == 'Price' && provider.partDepController.text.trim().isNotEmpty
-          ? int.parse(provider.partDepController.text.trim())
-          : 0,
-      provider.gstController.text.isNotEmpty ? int.parse(provider.gstController.text.trim()) : 0,
-    );
+    final gstPrice = provider.calculatePartGst(price, depPercent, depPrice, gst);
 
     if (widget.index == null) {
       provider.addIntoTable(
         part: provider.selectedItem,
         condition: partCondition,
-        depPercent: _selectedDep == 'Percentage' && provider.partDepController.text.trim().isNotEmpty
-            ? int.parse(provider.partDepController.text.trim())
-            : 0,
-        depPrice: _selectedDep == 'Price' && provider.partDepController.text.trim().isNotEmpty
-            ? int.parse(provider.partDepController.text.trim())
-            : 0,
-        salPercent: _selectedSalvage == 'Percentage' && provider.salvageController.text.trim().isNotEmpty
-            ? int.parse(provider.salvageController.text.trim())
-            : 0,
-        salPrice: _selectedSalvage == 'Price' && provider.salvageController.text.trim().isNotEmpty
-            ? int.parse(provider.salvageController.text.trim())
-            : 0,
+        depPercent: depPercent,
+        depPrice: depPrice,
+        salPercent: salPercent,
+        salPrice: salPrice,
         gstPrice: gstPrice,
-        price: provider.partPriceController.text.isNotEmpty ? int.parse(provider.partPriceController.text.trim()) : 0,
+        price: price,
         subTotal: subtotal,
         sd: _isSd.value! ? 1 : 0,
       );
@@ -215,19 +213,11 @@ class _PartsAddSheetState extends State<PartsAddSheet> {
         widget.index!,
         part: provider.selectedItem,
         condition: partCondition,
-        depPercent: _selectedDep == 'Percentage' && provider.partDepController.text.trim().isNotEmpty
-            ? int.parse(provider.partDepController.text.trim())
-            : 0,
-        depPrice: _selectedDep == 'Price' && provider.partDepController.text.trim().isNotEmpty
-            ? int.parse(provider.partDepController.text.trim())
-            : 0,
-        salPercent: _selectedSalvage == 'Percentage' && provider.salvageController.text.trim().isNotEmpty
-            ? int.parse(provider.salvageController.text.trim())
-            : 0,
-        salPrice: _selectedSalvage == 'Price' && provider.salvageController.text.trim().isNotEmpty
-            ? int.parse(provider.salvageController.text.trim())
-            : 0,
-        price: provider.partPriceController.text.isNotEmpty ? int.parse(provider.partPriceController.text.trim()) : 0,
+        depPercent: depPercent,
+        depPrice: depPrice,
+        salPercent: salPercent,
+        salPrice: salPrice,
+        price: price,
         gstPrice: gstPrice,
         subTotal: subtotal,
         sd: _isSd.value! ? 1 : 0,

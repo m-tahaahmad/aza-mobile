@@ -12,6 +12,7 @@ import 'package:icms_app/components/parts/parts_net_payable_banner.dart';
 import 'package:icms_app/components/parts/parts_settlement_card.dart';
 import 'package:icms_app/components/parts/parts_summary_row.dart';
 import 'package:icms_app/components/workflow/workflow_page_header.dart';
+import 'package:icms_app/utils/json_values.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../HelperFunctions/helper_functions.dart';
@@ -114,7 +115,7 @@ class _TotalAmountScreenState extends State<TotalAmountScreen> {
           ? customerDetailData?.plrGrossAmount ?? notAvailable
           : customerDetailData?.grossAmount ?? notAvailable;
 
-  int _parse(String? value) => int.tryParse(value ?? '0') ?? 0;
+  int _parse(String? value) => readIntOrZero(value, field: 'amount');
 
   String _afterDep(String? gross, String? dep) => '${_parse(gross) - _parse(dep)}';
 

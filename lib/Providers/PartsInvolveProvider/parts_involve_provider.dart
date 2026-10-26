@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 import '../../Model/CustomersDataModel/customer_detail_response_model.dart';
 import '../../Model/LabourParts/labour_parts_response_model.dart';
@@ -47,6 +48,8 @@ class PartsInvolveProvider extends ChangeNotifier {
   num sdGstAmount = 0;
   int sdPartsLength = 0;
 
+  int _controllerGst() => readIntOrZero(gstController.text, field: 'gst');
+
   addIntoTable(
       {Part? part,
       condition,
@@ -59,30 +62,40 @@ class PartsInvolveProvider extends ChangeNotifier {
       subTotal,
       int sd = 0,
       bool calculate = false}) {
+    final safePrice = price ?? 0;
+    final safeDepPercent = depPercent ?? 0;
+    final safeDepPrice = depPrice ?? 0;
+    final safeSalPercent = salPercent ?? 0;
+    final safeSalPrice = salPrice ?? 0;
     if (calculate) {
       subTotal = calculateSubtotal(
-          dep: depPercent,
-          depPrice: depPrice,
-          sal: salPercent!.toInt(),
-          salPrice: salPrice!.toInt(),
-          gst: gstController.text != "" ? int.parse(gstController.text.trim()) : 0,
-          price: price!,
+          dep: safeDepPercent,
+          depPrice: safeDepPrice,
+          sal: safeSalPercent.toInt(),
+          salPrice: safeSalPrice.toInt(),
+          gst: _controllerGst(),
+          price: safePrice,
           subtotal: 0);
     }
-    num? depAmount = 0;
-    num? salAmount = 0;
-    if (depPercent != 0) {
-      depAmount = (price! * (depPercent! / 100)).round().toInt();
-    } else {
-      depAmount = depPrice;
-    }
-    if (salPercent != 0) {
-      salAmount = (price! * (salPercent! / 100)).round().toInt();
-      debugPrint("SAL AMOUNT:: $salAmount");
-    } else {
-      salAmount = salPrice;
-    }
-    partDetails.add(PartTableDetails(part, condition, depPercent, depAmount!.toInt(), salPercent, salAmount!.toInt(), gstPrice, price, subTotal, sd));
+    final amounts = _depAndSalAmounts(
+      price: safePrice,
+      depPercent: safeDepPercent,
+      depPrice: safeDepPrice,
+      salPercent: safeSalPercent,
+      salPrice: safeSalPrice,
+    );
+    partDetails.add(PartTableDetails(
+      part,
+      condition,
+      safeDepPercent,
+      amounts.$1,
+      safeSalPercent,
+      amounts.$2,
+      gstPrice ?? 0,
+      safePrice,
+      subTotal ?? 0,
+      sd,
+    ));
     resetProvider();
 
     notifyListeners();
@@ -90,22 +103,44 @@ class PartsInvolveProvider extends ChangeNotifier {
 
   updateTableIndex(int index,
       {Part? part, condition, num? depPercent, num? depPrice, num? salPercent, num? salPrice, num? gstPrice, num? price, subTotal, int sd = 0}) {
-    num? depAmount = 0;
-    num? salAmount = 0;
-    if (depPercent != 0) {
-      depAmount = (price! * (depPercent! / 100)).round().toInt();
-    } else {
-      depAmount = depPrice;
-    }
-    if (salPercent != 0) {
-      salAmount = (price! * (salPercent! / 100)).round();
-    } else {
-      salAmount = salPrice;
-    }
-    partDetails[index] =
-        PartTableDetails(part, condition, depPercent, depAmount!.toInt(), salPercent, salAmount!.toInt(), gstPrice, price, subTotal, sd);
+    final safePrice = price ?? 0;
+    final safeDepPercent = depPercent ?? 0;
+    final safeDepPrice = depPrice ?? 0;
+    final safeSalPercent = salPercent ?? 0;
+    final safeSalPrice = salPrice ?? 0;
+    final amounts = _depAndSalAmounts(
+      price: safePrice,
+      depPercent: safeDepPercent,
+      depPrice: safeDepPrice,
+      salPercent: safeSalPercent,
+      salPrice: safeSalPrice,
+    );
+    partDetails[index] = PartTableDetails(
+      part,
+      condition,
+      safeDepPercent,
+      amounts.$1,
+      safeSalPercent,
+      amounts.$2,
+      gstPrice ?? 0,
+      safePrice,
+      subTotal ?? 0,
+      sd,
+    );
     resetProvider();
     notifyListeners();
+  }
+
+  (int, int) _depAndSalAmounts({
+    required num price,
+    required num depPercent,
+    required num depPrice,
+    required num salPercent,
+    required num salPrice,
+  }) {
+    final depAmount = depPercent != 0 ? (price * (depPercent / 100)).round() : depPrice;
+    final salAmount = salPercent != 0 ? (price * (salPercent / 100)).round() : salPrice;
+    return (depAmount.toInt(), salAmount.toInt());
   }
 
   bool checkPartID(String partName) {
@@ -132,95 +167,94 @@ class PartsInvolveProvider extends ChangeNotifier {
   }
 
   int calculatePartGst(num partPrice, num? dep, num depPrice, num gst) {
-    num depAmount = 0;
-    if (dep != 0) {
-      depAmount = (partPrice * (dep! / 100)).round();
-    } else {
-      depAmount = depPrice;
-    }
-    int partGst = ((partPrice - depAmount) * (gst / 100)).round().toInt();
+    final safeDep = dep ?? 0;
+    final depAmount = safeDep != 0 ? (partPrice * (safeDep / 100)).round() : depPrice;
+    final partGst = ((partPrice - depAmount) * (gst / 100)).round().toInt();
     debugPrint("part GST:: $partGst");
     return partGst;
   }
 
-  applyDep(String depValue) {
+  bool applyDep(String depValue) {
+    final parsed = _requiredAmount(depValue, 'dep');
+    if (parsed == null) return false;
     for (var element in partDetails) {
-      element.dep = int.parse(depValue);
-      var depAmount = (element.price! * (int.parse(depValue) / 100)).round();
-      element.depPrice = depAmount.toInt();
+      final price = element.price ?? 0;
+      element.dep = parsed;
+      element.depPrice = (price * (parsed / 100)).round().toInt();
       element.subTotal = calculateSubtotal(
-          dep: int.parse(depValue),
+          dep: parsed,
           depPrice: element.depPrice,
           sal: element.sal,
           salPrice: element.salPrice,
-          gst: gstController.text != "" ? int.parse(gstController.text.trim()) : 0,
-          price: element.price!,
+          gst: _controllerGst(),
+          price: price,
           subtotal: 0);
-      // element.subTotal = element.price - depAmount.toInt();
     }
     calculateAmount();
     calculateSDAmount();
     resetProvider();
     notifyListeners();
+    return true;
   }
 
-  applySalvage(String salValue) {
+  bool applySalvage(String salValue) {
+    final parsed = _requiredAmount(salValue, 'salvage');
+    if (parsed == null) return false;
     for (var element in partDetails) {
-      element.sal = int.parse(salValue);
-      num salAmount = (element.price! * (int.parse(salValue) / 100)).round();
-      element.salPrice = salAmount.toInt();
+      final price = element.price ?? 0;
+      element.sal = parsed;
+      element.salPrice = (price * (parsed / 100)).round().toInt();
       element.subTotal = calculateSubtotal(
           dep: element.dep,
           depPrice: element.depPrice,
-          sal: int.parse(salValue),
+          sal: parsed,
           salPrice: element.salPrice,
-          gst: gstController.text != "" ? int.parse(gstController.text.trim()) : 0,
-          price: element.price!,
+          gst: _controllerGst(),
+          price: price,
           subtotal: 0);
-      // element.subTotal = element.price - depAmount.toInt();
     }
     calculateAmount();
     calculateSDAmount();
     resetProvider();
     notifyListeners();
+    return true;
   }
 
-  applyGst(String gstValue) {
+  bool applyGst(String gstValue) {
+    final parsed = _requiredAmount(gstValue, 'gst');
+    if (parsed == null) return false;
     for (var element in partDetails) {
-      element.gstPrice = calculatePartGst(element.price!, element.dep, element.depPrice, int.parse(gstValue));
+      final price = element.price ?? 0;
+      element.gstPrice = calculatePartGst(price, element.dep, element.depPrice, parsed);
       element.subTotal = calculateSubtotal(
           dep: element.dep,
           depPrice: element.depPrice,
           sal: element.sal,
           salPrice: element.salPrice,
-          gst: int.parse(gstValue),
-          price: element.price!,
+          gst: parsed,
+          price: price,
           subtotal: 0);
-      // element.subTotal = element.price - depAmount.toInt();
     }
     calculateAmount();
     calculateSDAmount();
     notifyListeners();
+    return true;
+  }
+
+  int? _requiredAmount(String value, String field) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) return 0;
+    return readInt(trimmed, field: field);
   }
 
   int calculateSubtotal({num? dep, num? depPrice, num? sal, num? salPrice, required num gst, required num price, num? subtotal}) {
     debugPrint("dep = $dep, depPrice = $depPrice, sal = $sal, salPrice = $salPrice, gst = $gst, Price = $price, Subtotal = $subtotal");
-    num? depAmount;
-    num? salAmount;
-    num gstAmount;
-    if (dep != 0) {
-      depAmount = (price * (dep! / 100)).round();
-    } else {
-      depAmount = depPrice;
-    }
-    if (sal != 0) {
-      salAmount = (price * (sal! / 100)).round();
-    } else {
-      salAmount = salPrice;
-    }
-    gstAmount = ((price - depAmount!) * (gst / 100)).round();
-
-    subtotal = (price - depAmount) + gstAmount - salAmount!;
+    final safeDep = dep ?? 0;
+    final safeSal = sal ?? 0;
+    final depAmount = safeDep != 0 ? (price * (safeDep / 100)).round() : (depPrice ?? 0);
+    final salAmount = safeSal != 0 ? (price * (safeSal / 100)).round() : (salPrice ?? 0);
+    final gstAmount = ((price - depAmount) * (gst / 100)).round();
+    subtotal = (price - depAmount) + gstAmount - salAmount;
     debugPrint("SubTotal:: $subtotal");
     return subtotal.round().toInt();
   }
@@ -234,12 +268,12 @@ class PartsInvolveProvider extends ChangeNotifier {
     overallTotal = 0;
     debugPrint("Length:: ${partDetails.length}");
     for (var element in partDetails) {
-      grossTotal = grossTotal + element.price!;
+      grossTotal = grossTotal + (element.price ?? 0);
       depreciationAmount = (depreciationAmount + element.depPrice).round().toInt();
       plrSalvage = plrSalvage + element.salPrice;
       debugPrint("EG:: ${element.gstPrice}");
-      plrGst = plrGst + element.gstPrice!;
-      overallTotal = overallTotal + element.subTotal!;
+      plrGst = plrGst + (element.gstPrice ?? 0);
+      overallTotal = overallTotal + (element.subTotal ?? 0);
     }
     debugPrint("Gross:: $grossTotal");
     debugPrint("DEP:: $depreciationAmount");
@@ -247,8 +281,7 @@ class PartsInvolveProvider extends ChangeNotifier {
     debugPrint("plrGst:: $plrGst");
     partsTotal = grossTotal - depreciationAmount;
     debugPrint("GST:: ${gstController.text.trim()}");
-    gstAmount =
-        gstController.text != "" ? (partsTotal * (int.parse(gstController.text.trim()) / 100)).round().toInt() : 0;
+    gstAmount = (partsTotal * (_controllerGst() / 100)).round().toInt();
     debugPrint("GST Amount:: $gstAmount");
     calculateSDAmount();
     notifyListeners();
@@ -264,12 +297,12 @@ class PartsInvolveProvider extends ChangeNotifier {
     sdPartsLength = 0;
     debugPrint("Length:: ${partDetails.length}");
     for (var element in partDetails.where((element) => element.sd == 1)) {
-      sdGrossTotal = sdGrossTotal + element.price!;
+      sdGrossTotal = sdGrossTotal + (element.price ?? 0);
       sdDepreciationAmount = (sdDepreciationAmount + element.depPrice).toInt();
       sdPlrSalvage = sdPlrSalvage + element.salPrice;
       debugPrint("EG:: ${element.gstPrice}");
-      sdPlrGst = sdPlrGst + element.gstPrice!;
-      sdOverallTotal = sdOverallTotal + element.subTotal!;
+      sdPlrGst = sdPlrGst + (element.gstPrice ?? 0);
+      sdOverallTotal = sdOverallTotal + (element.subTotal ?? 0);
     }
     sdPartsLength = partDetails.where((element) => element.sd == 1).length;
     debugPrint("SD Length:: $sdPartsLength");
@@ -279,8 +312,7 @@ class PartsInvolveProvider extends ChangeNotifier {
     debugPrint("SD plrGst:: $sdPlrGst");
     sdPartsTotal = sdGrossTotal - sdDepreciationAmount;
     debugPrint("SD GST:: ${gstController.text.trim()}");
-    sdGstAmount =
-        gstController.text != "" ? (sdPartsTotal * (int.parse(gstController.text.trim()) / 100)).round().toInt() : 0;
+    sdGstAmount = (sdPartsTotal * (_controllerGst() / 100)).round().toInt();
     debugPrint("SD GST Amount:: $sdGstAmount");
 
     notifyListeners();

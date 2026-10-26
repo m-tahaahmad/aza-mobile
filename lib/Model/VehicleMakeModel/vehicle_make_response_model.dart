@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class VehicleMakeResponseModel {
   bool? success;
   List<VehicleMakeData>? data;
@@ -36,10 +38,10 @@ class VehicleMakeData {
   VehicleMakeData({this.id, this.name, this.createdAt, this.updatedAt});
 
   VehicleMakeData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {

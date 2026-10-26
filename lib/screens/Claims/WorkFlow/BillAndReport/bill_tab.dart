@@ -9,6 +9,7 @@ import 'package:icms_app/components/custom_filled_button.dart';
 import 'package:icms_app/components/custom_snack_bar.dart';
 import 'package:icms_app/constants/theme_constants.dart';
 import 'package:icms_app/constants/font_sizes.dart';
+import 'package:icms_app/utils/json_values.dart';
 import 'package:provider/provider.dart';
 
 class BillTab extends StatefulWidget {
@@ -84,9 +85,10 @@ class _BillTabState extends State<BillTab> {
     return v.toString();
   }
 
-  int? _intOrNull(dynamic v) {
-    if (v == null || v == '') return null;
-    return int.tryParse(v.toString());
+  int? _billAmount(String text) {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return 0;
+    return readInt(trimmed, field: 'bill');
   }
 
   @override
@@ -106,40 +108,53 @@ class _BillTabState extends State<BillTab> {
 
   Future<void> _save() async {
     if (widget.claimId == null) return;
+
+    final nPhotos = _billAmount(_noOfPhotosController.text);
+    final perPhoto = _billAmount(_perPhotoRateController.text);
+    final profFee = _billAmount(_professionalFeeController.text);
+    final reInsp = _billAmount(_reInspFeeController.text);
+    final outstation = _billAmount(_outstationFeeController.text);
+    final partsInsp = _billAmount(_partsInspFeeController.text);
+    final conveyance = _billAmount(_conveyanceFeeController.text);
+    final poaInsp = _billAmount(_poaInspFeeController.text);
+    final underRepair = _billAmount(_underRepairInspFeeController.text);
+    if ([nPhotos, perPhoto, profFee, reInsp, outstation, partsInsp, conveyance, poaInsp, underRepair].any((value) => value == null)) {
+      showSnackBar(context, 'Enter a valid number');
+      return;
+    }
+
     setState(() => _isSaving = true);
 
-    final nPhotos = _intOrNull(_noOfPhotosController.text) ?? 0;
-    final perPhoto = _intOrNull(_perPhotoRateController.text) ?? 0;
-    final totalPhoto = nPhotos * perPhoto;
-
-    final profFee = _intOrNull(_professionalFeeController.text) ?? 0;
+    final photos = nPhotos!;
+    final photoRate = perPhoto!;
+    final fee = profFee!;
+    final reInspection = reInsp!;
+    final outstationFee = outstation!;
+    final partsFee = partsInsp!;
+    final conveyanceFee = conveyance!;
+    final poaFee = poaInsp!;
+    final underRepairFee = underRepair!;
+    final totalPhoto = photos * photoRate;
     final taxPct = 16;
-    final taxAmt = (taxPct / 100) * profFee;
-    final net = profFee + taxAmt;
-
-    final reInsp = _intOrNull(_reInspFeeController.text) ?? 0;
-    final outstation = _intOrNull(_outstationFeeController.text) ?? 0;
-    final partsInsp = _intOrNull(_partsInspFeeController.text) ?? 0;
-    final conveyance = _intOrNull(_conveyanceFeeController.text) ?? 0;
-    final poaInsp = _intOrNull(_poaInspFeeController.text) ?? 0;
-    final underRepair = _intOrNull(_underRepairInspFeeController.text) ?? 0;
-    final netTotal = net + totalPhoto + reInsp + outstation + partsInsp + conveyance + poaInsp + underRepair;
+    final taxAmt = (taxPct / 100) * fee;
+    final net = fee + taxAmt;
+    final netTotal = net + totalPhoto + reInspection + outstationFee + partsFee + conveyanceFee + poaFee + underRepairFee;
 
     final billMap = {
       'claim_id': widget.claimId,
-      'professional_fee': profFee,
-      'no_of_photos': nPhotos,
-      'per_photo_rate': perPhoto,
+      'professional_fee': fee,
+      'no_of_photos': photos,
+      'per_photo_rate': photoRate,
       'total_photo': totalPhoto,
       'tax_percent': taxPct,
       'tax_amount': taxAmt.round(),
       'net': net.round(),
-      're_insp_fee': reInsp,
-      'outstation_fee': outstation,
-      'parts_insp_fee': partsInsp,
-      'conveyance_fee': conveyance,
-      'poa_insp_fee': poaInsp,
-      'under_repair_insp_fee': underRepair,
+      're_insp_fee': reInspection,
+      'outstation_fee': outstationFee,
+      'parts_insp_fee': partsFee,
+      'conveyance_fee': conveyanceFee,
+      'poa_insp_fee': poaFee,
+      'under_repair_insp_fee': underRepairFee,
       'net_total': netTotal.round(),
       'remarks': _remarksController.text.trim().isEmpty ? null : _remarksController.text.trim(),
     };

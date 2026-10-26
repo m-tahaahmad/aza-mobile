@@ -1,4 +1,5 @@
 import '../error_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class UserDataResponseModel {
   bool? success;
@@ -46,9 +47,9 @@ class UserData {
   UserData.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     accessToken = json['access_token'] ?? json['token'];
-    refreshToken = json['refresh_token'];
-    expiresIn = json['expires_in'];
-    tokenType = json['token_type'];
+    refreshToken = readString(json['refresh_token']);
+    expiresIn = readInt(json['expires_in'], field: 'expires_in');
+    tokenType = readString(json['token_type']);
   }
 
   Map<String, dynamic> toJson() {
@@ -79,15 +80,15 @@ class User {
   User({this.id, this.userableType, this.userableId, this.roleId, this.zoneId, this.username, this.isLoggedIn, this.createdAt, this.updatedAt});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userableType = json['userable_type'];
-    userableId = json['userable_id'];
-    roleId = json['role_id'];
+    id = readInt(json['id'], field: 'id');
+    userableType = readString(json['userable_type']);
+    userableId = readInt(json['userable_id'], field: 'userable_id');
+    roleId = readInt(json['role_id'], field: 'role_id');
     zoneId = json['zone_id'];
-    username = json['username'];
-    isLoggedIn = json['is_logged_in'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    username = readString(json['username']);
+    isLoggedIn = readInt(json['is_logged_in'], field: 'is_logged_in');
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {

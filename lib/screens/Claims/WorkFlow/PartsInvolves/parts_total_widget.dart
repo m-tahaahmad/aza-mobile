@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 import '../../../../components/bordered_container.dart';
 import '../../../../constants/theme_constants.dart';
@@ -45,7 +46,8 @@ class _PartsTotalWidgetState extends State<PartsTotalWidget> {
             value: widget.depAmount,
           ),
           BorderedContainer(
-            value: int.parse(widget.replacedPartsCosts!) - int.parse(widget.depAmount!),
+            value: readIntOrZero(widget.replacedPartsCosts, field: 'replaced_parts') -
+                readIntOrZero(widget.depAmount, field: 'dep'),
             textColor: ColorConstants.primaryColor,
           ),
           BorderedContainer(
@@ -55,7 +57,9 @@ class _PartsTotalWidgetState extends State<PartsTotalWidget> {
             taxValue: widget.gst,
           ),
           BorderedContainer(
-            value: (int.parse(widget.replacedPartsCosts!) - int.parse(widget.depAmount!)) + int.parse(widget.gstAmount!),
+            value: (readIntOrZero(widget.replacedPartsCosts, field: 'replaced_parts') -
+                    readIntOrZero(widget.depAmount, field: 'dep')) +
+                readIntOrZero(widget.gstAmount, field: 'gst'),
             textColor: ColorConstants.primaryColor,
           ),
           BorderedContainer(
@@ -63,7 +67,10 @@ class _PartsTotalWidgetState extends State<PartsTotalWidget> {
             value: widget.sal,
           ),
           BorderedContainer(
-            value: ((int.parse(widget.replacedPartsCosts!) - int.parse(widget.depAmount!)) + int.parse(widget.gstAmount!)) - int.parse(widget.sal!),
+            value: ((readIntOrZero(widget.replacedPartsCosts, field: 'replaced_parts') -
+                        readIntOrZero(widget.depAmount, field: 'dep')) +
+                    readIntOrZero(widget.gstAmount, field: 'gst')) -
+                readIntOrZero(widget.sal, field: 'salvage'),
             textColor: ColorConstants.primaryColor,
           ),
           BorderedContainer(

@@ -20,8 +20,8 @@ import '../../../../Services/CustomerDetailServices/customer_detail_service.dart
 import '../../../../Services/CustomerDetailServices/update_single_customer.dart';
 import '../../../../Services/Documents/document_service.dart';
 import '../../../../components/app_loader.dart';
+import '../../../../components/workflow/workflow_async_body.dart';
 import '../../../../constants/theme_constants.dart';
-import '../../../../constants/font_sizes.dart';
 import '../../../../constants/globals.dart';
 
 class CheckListScreen extends StatefulWidget {
@@ -164,33 +164,11 @@ class _CheckListScreenState extends State<CheckListScreen> {
         body: FutureBuilder<List<ApiResponse<dynamic>?>>(
           future: apisList,
           builder: (context, AsyncSnapshot<List<ApiResponse<dynamic>?>> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: AppLoader());
-            }
-
-            final results = snapshot.data!;
-            final allCompleted = results.every((response) => response?.status == Status.completed);
-            if (!allCompleted) {
-              final message = results
-                  .where((response) => response?.status == Status.error)
-                  .map((response) => response?.message)
-                  .whereType<String>()
-                  .firstOrNull;
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    message ?? 'Failed to load checklist details.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: FontSizes.normalText1,
-                      color: const Color(0xFF667085),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              );
-            }
+            final gate = workflowAsyncGate(
+              snapshot: snapshot,
+              fallback: 'Failed to load checklist details.',
+            );
+            if (gate != null) return gate;
 
             if (isRefreshing) {
               return const Center(child: AppLoader());
@@ -200,9 +178,7 @@ class _CheckListScreenState extends State<CheckListScreen> {
               builder: (context, customerDetailProvider, documentsProvider, workflowProvider, child) {
                 final customerDetailData = customerDetailProvider.customerDetailResponseModel?.data;
                 if (customerDetailData == null) {
-                  return const SafeArea(
-                    child: Center(child: Text('Failed to load checklist details.')),
-                  );
+                  return workflowLoadMessage('Failed to load checklist details.');
                 }
 
                 final documentsData = customerDetailData.documents ?? [];

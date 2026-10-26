@@ -9,7 +9,7 @@ import '../../../../Providers/CustomerDetailProvider/customer_detail_provider.da
 import '../../../../Providers/WorkflowProvider/workflow_provider.dart';
 import '../../../../Services/API/api_response.dart';
 import '../../../../Services/CustomerDetailServices/customer_detail_service.dart';
-import '../../../../components/app_loader.dart';
+import '../../../../components/workflow/workflow_async_body.dart';
 
 class MarkImportantDialog extends StatefulWidget {
   final int? id;
@@ -82,16 +82,18 @@ class _MarkImportantDialogState extends State<MarkImportantDialog> {
               child: FutureBuilder<ApiResponse<CustomerDetailResponseModel>?>(
                 future: _getCustomerDetails,
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 48.h),
-                      child: const Center(child: AppLoader()),
-                    );
-                  }
+                  final gate = workflowAsyncGate(
+                    snapshot: snapshot,
+                    fallback: 'Failed to load claim details.',
+                  );
+                  if (gate != null) return gate;
 
                   return Consumer2<CustomerDetailProvider, WorkflowProvider>(
                     builder: (context, customerDetailProvider, workflowProvider, child) {
-                      final customerDetailData = customerDetailProvider.customerDetailResponseModel!.data!;
+                      final customerDetailData = customerDetailProvider.customerDetailResponseModel?.data;
+                      if (customerDetailData == null) {
+                        return workflowLoadMessage('Failed to load claim details.');
+                      }
                       return MarkImportantDialogUI(
                         id: widget.id,
                         lossDate: customerDetailData.dateOfLoss ?? _notAvailable,

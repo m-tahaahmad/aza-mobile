@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class DocumentResponseModel {
   bool? success;
   List<DocumentData>? data;
@@ -37,9 +39,9 @@ class DocumentData {
 
   DocumentData.fromJson(Map<String, dynamic> json) {
     id = _parseIntId(json['id']);
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   static int? _parseIntId(dynamic value) {

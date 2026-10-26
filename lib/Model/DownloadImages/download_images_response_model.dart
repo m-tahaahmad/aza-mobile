@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class DownloadImagesListModel {
   List<DownloadImagesDataModel>? imagesList;
 
@@ -32,13 +34,13 @@ class DownloadImagesDataModel {
   DownloadImagesDataModel({this.id, this.tenantId, this.filename, this.path, this.createdAt, this.updatedAt, this.imageUrl});
 
   DownloadImagesDataModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    tenantId = json['tenant_id'];
-    filename = json['filename'];
-    path = json['path'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    imageUrl = json['image_url'];
+    id = readInt(json['id'], field: 'id');
+    tenantId = readInt(json['tenant_id'], field: 'tenant_id');
+    filename = readString(json['filename']);
+    path = readString(json['path']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
+    imageUrl = readString(json['image_url']);
   }
 
   Map<String, dynamic> toJson() {

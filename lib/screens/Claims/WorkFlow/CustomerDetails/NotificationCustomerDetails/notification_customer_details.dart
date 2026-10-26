@@ -12,6 +12,7 @@ import '../../../../../Model/CustomersDataModel/customer_detail_response_model.d
 import '../../../../../Providers/CustomerDetailProvider/customer_detail_provider.dart';
 import '../../../../../Services/API/api_response.dart';
 import '../../../../../Services/CustomerDetailServices/customer_detail_service.dart';
+import '../../../../../components/workflow/workflow_async_body.dart';
 import '../../../../../Services/CustomerDetailServices/update_single_customer.dart';
 import '../../../../../components/app_loader.dart';
 import '../../../../../components/custom_snack_bar.dart';
@@ -60,13 +61,18 @@ class _NotificationCustomerDetailsState
         body: FutureBuilder<ApiResponse<dynamic>?>(
             future: _getCustomerDetails,
             builder: (context, AsyncSnapshot<ApiResponse<dynamic>?> snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(child: AppLoader());
-              } else {
-                return Consumer<CustomerDetailProvider>(
+              final gate = workflowAsyncGate(
+                snapshot: snapshot,
+                fallback: 'Failed to load customer details.',
+              );
+              if (gate != null) return gate;
+
+              return Consumer<CustomerDetailProvider>(
                     builder: (context, customerDetailProvider, child) {
-                  CustomerDetailData customerDetailData =
-                      customerDetailProvider.customerDetailResponseModel!.data!;
+                  final customerDetailData = customerDetailProvider.customerDetailResponseModel?.data;
+                  if (customerDetailData == null) {
+                    return workflowLoadMessage('Failed to load customer details.');
+                  }
                   return SafeArea(
                     child: Stack(
                       children: [
@@ -304,7 +310,6 @@ class _NotificationCustomerDetailsState
                     ),
                   );
                 });
-              }
             }),
       ),
     );

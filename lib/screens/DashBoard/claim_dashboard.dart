@@ -11,6 +11,8 @@ import '../../components/app_loader.dart';
 import '../../components/dashboard/dashboard_card_styles.dart';
 import '../../components/dashboard/dashboard_stage_colors.dart';
 import '../../components/dashboard/dashboard_stat_card.dart';
+import 'package:icms_app/utils/json_values.dart';
+
 import '../../constants/globals.dart';
 import '../Claims/pending_claims.dart';
 
@@ -24,15 +26,27 @@ class ClaimDashboard extends StatefulWidget {
 class _ClaimDashboardState extends State<ClaimDashboard> with AutomaticKeepAliveClientMixin {
   Future<ApiResponse<DashboardResponseModel>>? _getDashboard;
   bool isLoading = false;
+  String? _idError;
+
+  void _loadDashboard() {
+    final id = readId(userId, field: 'user_id');
+    if (id == null) {
+      _idError = takeUnparsedNumberMessage() ?? 'Could not read user id.';
+      _getDashboard = null;
+      return;
+    }
+    _idError = null;
+    _getDashboard = DashBoardService().getDashboard(context, id);
+  }
 
   @override
   void initState() {
     super.initState();
-    _getDashboard = DashBoardService().getDashboard(context, int.parse(userId!));
+    _loadDashboard();
   }
 
   Future _handleRefresh() async {
-    _getDashboard = DashBoardService().getDashboard(context, int.parse(userId!));
+    _loadDashboard();
     await Future.delayed(const Duration(milliseconds: 1500));
     return _getDashboard;
   }
@@ -64,6 +78,9 @@ class _ClaimDashboardState extends State<ClaimDashboard> with AutomaticKeepAlive
       child: FutureBuilder<ApiResponse<DashboardResponseModel>>(
         future: _getDashboard,
         builder: (context, snapshot) {
+          if (_idError != null) {
+            return Center(child: Text(_idError!));
+          }
           if (!snapshot.hasData) {
             return const Center(child: AppLoader());
           }

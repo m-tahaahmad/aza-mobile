@@ -7,7 +7,7 @@ import 'package:icms_app/Providers/CustomerDetailProvider/customer_detail_provid
 import 'package:icms_app/Providers/WorkflowProvider/workflow_provider.dart';
 import 'package:icms_app/Services/CustomerDetailServices/update_single_customer.dart';
 import 'package:icms_app/Services/WorkshopService/workshop_service.dart';
-import 'package:icms_app/components/app_loader.dart';
+import 'package:icms_app/components/workflow/workflow_async_body.dart';
 import 'package:icms_app/components/claims/customer_detail_bottom_bar.dart';
 import 'package:icms_app/components/claims/customer_detail_summary_banner.dart';
 import 'package:icms_app/components/custom_snack_bar.dart';
@@ -89,14 +89,18 @@ class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
         body: FutureBuilder<List<ApiResponse<dynamic>?>>(
           future: apisList,
           builder: (context, AsyncSnapshot<List<ApiResponse<dynamic>?>> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: AppLoader());
-            }
+            final gate = workflowAsyncGate(
+              snapshot: snapshot,
+              fallback: 'Failed to load customer details.',
+            );
+            if (gate != null) return gate;
 
             return Consumer2<CustomerDetailProvider, WorkflowProvider>(
               builder: (context, customerDetailProvider, workflowProvider, child) {
-                final customerDetailData =
-                    customerDetailProvider.customerDetailResponseModel!.data!;
+                final customerDetailData = customerDetailProvider.customerDetailResponseModel?.data;
+                if (customerDetailData == null) {
+                  return workflowLoadMessage('Failed to load customer details.');
+                }
 
                 return SafeArea(
                   child: Column(

@@ -1,4 +1,5 @@
 import 'package:icms_app/Model/error_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class CustomerDetailResponseModel {
   bool? success;
@@ -221,26 +222,26 @@ class CustomerDetailData {
       this.bill});
 
   CustomerDetailData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    employeeId = json['employee_id'];
-    zoneId = json['zone_id'];
+    id = readInt(json['id'], field: 'id');
+    employeeId = readInt(json['employee_id'], field: 'employee_id');
+    zoneId = readInt(json['zone_id'], field: 'zone_id');
     intType = json['int_type'];
-    intimationNo = json['intimation_no'];
+    intimationNo = readString(json['intimation_no']);
     intChannel = json['int_channel'];
     claimCity = json['claim_city'];
-    lossNo = json['loss_no'];
-    appNo = json['app_no'];
-    regNo = json['reg_no'];
+    lossNo = readString(json['loss_no']);
+    appNo = readString(json['app_no']);
+    regNo = readString(json['reg_no']);
     refNo = json['ref_no'];
-    claimTypeId = json['claim_type_id'];
-    makeId = json['make_id'];
-    surveyorId = json['surveyor_id'];
+    claimTypeId = readInt(json['claim_type_id'], field: 'claim_type_id');
+    makeId = readInt(json['make_id'], field: 'make_id');
+    surveyorId = readInt(json['surveyor_id'], field: 'surveyor_id');
     reInspSurveyorId = json['re_insp_surveyor_id'];
-    dateOfLoss = json['date_of_loss'];
-    intimationDate = json['intimation_date'];
-    surveyDate = json['survey_date'];
-    intimatedBy = json['intimated_by'];
-    intimatedAt = json['intimated_at'];
+    dateOfLoss = readString(json['date_of_loss']);
+    intimationDate = readString(json['intimation_date']);
+    surveyDate = readString(json['survey_date']);
+    intimatedBy = readString(json['intimated_by']);
+    intimatedAt = readString(json['intimated_at']);
     reportBy = json['report_by'];
     reportAt = json['report_at'];
     assignedBy = json['assigned_by'];
@@ -250,48 +251,48 @@ class CustomerDetailData {
     remarks = json['remarks'];
     history = json['history'];
     priority = json['priority'];
-    status = json['status'];
-    agreedLabour = json['agreed_labour'];
-    taxRate = json['tax_rate'];
-    taxAmount = json['tax_amount'];
-    grossAmount = json['gross_amount'];
-    plrAgreedLabour = json['plr_agreed_labour'];
-    plrDemandLabour = json['plr_demand_labour'];
-    plrTaxRate = json['plr_tax_rate'];
-    plrTaxAmount = json['plr_tax_amount'];
-    plrGrossAmount = json['plr_gross_amount'];
-    totalParts = json['total_parts'];
-    totalGst = json['total_gst'];
-    totalDep = json['total_dep'];
-    totalSalvage = json['total_salvage'];
-    plrTotalParts = json['plr_total_parts'];
-    plrTotalGst = json['plr_total_gst'];
-    plrTotalDep = json['plr_total_dep'];
-    plrTotalSalvage = json['plr_total_salvage'];
-    netTotal = json['net_total'];
-    plrNetTotal = json['plr_net_total'];
+    status = readString(json['status']);
+    agreedLabour = readString(json['agreed_labour']);
+    taxRate = readString(json['tax_rate']);
+    taxAmount = readString(json['tax_amount']);
+    grossAmount = readString(json['gross_amount']);
+    plrAgreedLabour = readString(json['plr_agreed_labour']);
+    plrDemandLabour = readString(json['plr_demand_labour']);
+    plrTaxRate = readString(json['plr_tax_rate']);
+    plrTaxAmount = readString(json['plr_tax_amount']);
+    plrGrossAmount = readString(json['plr_gross_amount']);
+    totalParts = readString(json['total_parts']);
+    totalGst = readString(json['total_gst']);
+    totalDep = readString(json['total_dep']);
+    totalSalvage = readString(json['total_salvage']);
+    plrTotalParts = readString(json['plr_total_parts']);
+    plrTotalGst = readString(json['plr_total_gst']);
+    plrTotalDep = readString(json['plr_total_dep']);
+    plrTotalSalvage = readString(json['plr_total_salvage']);
+    netTotal = readString(json['net_total']);
+    plrNetTotal = readString(json['plr_net_total']);
     circumstances = json['circumstances'];
-    isChequeReceived = json['is_cheque_received'];
-    isSubmitted = json['is_submitted'];
-    isSettled = json['is_settled'];
-    isReinspection = json['is_reinspection'];
-    isReferredBack = json['is_referred_back'];
-    docReceived = json['doc_received'];
-    isCustomer = json['is_customer'];
-    isDriver = json['is_driver'];
-    isFirstInspPics = json['is_first_insp_pics'];
-    isReInspPics = json['is_re_insp_pics'];
-    isLabor = json['is_labor'];
-    isParts = json['is_parts'];
-    isFirstInspDocs = json['is_first_insp_docs'];
-    isReInspDocs = json['is_re_insp_docs'];
-    isComments = json['is_comments'];
-    isReInspComment = json['is_re_insp_comment'];
-    isWithdraw = json['is_withdraw'];
+    isChequeReceived = readInt(json['is_cheque_received'], field: 'is_cheque_received');
+    isSubmitted = readInt(json['is_submitted'], field: 'is_submitted');
+    isSettled = readInt(json['is_settled'], field: 'is_settled');
+    isReinspection = readInt(json['is_reinspection'], field: 'is_reinspection');
+    isReferredBack = readInt(json['is_referred_back'], field: 'is_referred_back');
+    docReceived = readInt(json['doc_received'], field: 'doc_received');
+    isCustomer = readInt(json['is_customer'], field: 'is_customer');
+    isDriver = readInt(json['is_driver'], field: 'is_driver');
+    isFirstInspPics = readInt(json['is_first_insp_pics'], field: 'is_first_insp_pics');
+    isReInspPics = readInt(json['is_re_insp_pics'], field: 'is_re_insp_pics');
+    isLabor = readInt(json['is_labor'], field: 'is_labor');
+    isParts = readInt(json['is_parts'], field: 'is_parts');
+    isFirstInspDocs = readInt(json['is_first_insp_docs'], field: 'is_first_insp_docs');
+    isReInspDocs = readInt(json['is_re_insp_docs'], field: 'is_re_insp_docs');
+    isComments = readInt(json['is_comments'], field: 'is_comments');
+    isReInspComment = readInt(json['is_re_insp_comment'], field: 'is_re_insp_comment');
+    isWithdraw = readInt(json['is_withdraw'], field: 'is_withdraw');
     invoiceNo = json['invoice_no'];
     employee = json['employee'];
-    insuredSince = json['insured_since'];
-    previousClaims = json['previous_claims'];
+    insuredSince = readString(json['insured_since']);
+    previousClaims = readString(json['previous_claims']);
     surveyor = json['surveyor'] != null ? Surveyor.fromJson(json['surveyor']) : null;
     claimType = json['claim_type'] != null ? ClaimType.fromJson(json['claim_type']) : null;
     policy = json['policy'] != null ? Policy.fromJson(json['policy']) : null;
@@ -579,7 +580,7 @@ class Bill {
   });
 
   Bill.fromJson(Map<String, dynamic> json) {
-    claimId = json['claim_id'];
+    claimId = readInt(json['claim_id'], field: 'claim_id');
     professionalFee = json['professional_fee'];
     noOfPhotos = json['no_of_photos'];
     perPhotoRate = json['per_photo_rate'];
@@ -596,11 +597,11 @@ class Bill {
     poaInspFee = json['poa_insp_fee'];
     underRepairInspFee = json['under_repair_insp_fee'];
     reportDate = json['report_date'];
-    isReportIssued = json['is_report_issued'];
+    isReportIssued = readInt(json['is_report_issued'], field: 'is_report_issued');
     isOutstation = json['is_outstation'];
     netTotal = json['net_total'];
     remarks = json['remarks'];
-    isBillEditable = json['is_bill_editable'];
+    isBillEditable = readInt(json['is_bill_editable'], field: 'is_bill_editable');
   }
 
   Map<String, dynamic> toJson() {
@@ -640,10 +641,10 @@ class ClaimType {
   ClaimType({this.id, this.name, this.createdAt, this.updatedAt});
 
   ClaimType.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -721,34 +722,34 @@ class Policy {
       this.insuranceCompanyBranch});
 
   Policy.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
     intPerson = json['int_person'];
-    insuranceCompanyId = json['insurance_company_id'];
-    insuranceCompanyBranchId = json['insurance_company_branch_id'];
-    isWindow = json['is_window'];
-    policyNo = json['policy_no'];
+    insuranceCompanyId = readInt(json['insurance_company_id'], field: 'insurance_company_id');
+    insuranceCompanyBranchId = readInt(json['insurance_company_branch_id'], field: 'insurance_company_branch_id');
+    isWindow = readInt(json['is_window'], field: 'is_window');
+    policyNo = readString(json['policy_no']);
     certificateNo = json['certificate_no'];
     sumInsured = json['sum_insured'];
     deductible = json['deductible'];
     endrosmentNo = json['endrosment_no'];
-    expiryDate = json['expiry_date'];
+    expiryDate = readString(json['expiry_date']);
     underInsuranceValue = json['under_insurance_value'];
     underInsuranceAmount = json['under_insurance_amount'];
     excess = json['excess'];
     marketValue = json['market_value'];
-    insuredName = json['insured_name'];
-    insuredCnic = json['insured_cnic'];
-    insuredAddress = json['insured_address'];
-    cityId = json['city_id'];
-    insuredContact = json['insured_contact'];
-    bankId = json['bank_id'];
-    bankCityId = json['bank_city_id'];
+    insuredName = readString(json['insured_name']);
+    insuredCnic = readString(json['insured_cnic']);
+    insuredAddress = readString(json['insured_address']);
+    cityId = readInt(json['city_id'], field: 'city_id');
+    insuredContact = readString(json['insured_contact']);
+    bankId = readInt(json['bank_id'], field: 'bank_id');
+    bankCityId = readInt(json['bank_city_id'], field: 'bank_city_id');
     regNo = json['reg_no'];
     surveyDate = json['survey_date'];
     lossNo = json['loss_no'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     insuranceCompany = json['insurance_company'] != null ? InsuranceCompany.fromJson(json['insurance_company']) : null;
     insuranceCompanyBranch =
         json['insurance_company_branch'] != null ? InsuranceCompanyBranch.fromJson(json['insurance_company_branch']) : null;
@@ -804,11 +805,11 @@ class InsuranceCompanyBranch {
   InsuranceCompanyBranch({this.id, this.companyId, this.name, this.createdAt, this.updatedAt});
 
   InsuranceCompanyBranch.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    companyId = json['company_id'];
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    companyId = readInt(json['company_id'], field: 'company_id');
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -867,25 +868,25 @@ class WorkshopDetail {
       this.workshop});
 
   WorkshopDetail.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    workshopId = json['workshop_id'];
-    placeOfSurvey = json['place_of_survey'];
-    sameAsWorkshop = json['same_as_workshop'];
-    placeOfLoss = json['place_of_loss'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    workshopId = readInt(json['workshop_id'], field: 'workshop_id');
+    placeOfSurvey = readString(json['place_of_survey']);
+    sameAsWorkshop = readString(json['same_as_workshop']);
+    placeOfLoss = readString(json['place_of_loss']);
     billNo = json['bill_no'];
     invoiceDate = json['invoice_date'];
-    lossAmount = json['loss_amount'];
+    lossAmount = readString(json['loss_amount']);
     lumpSumpAmount = json['lump_sump_amount'];
     estimateDate = json['estimate_date'];
     settlementDate = json['settlement_date'];
     reInspDate = json['re_insp_date'];
     docReceiveDate = json['doc_receive_date'];
     paymentBy = json['payment_by'];
-    isLabourSettled = json['is_labour_settled'];
+    isLabourSettled = readInt(json['is_labour_settled'], field: 'is_labour_settled');
     remarks = json['remarks'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     workshop = json['workshop'] != null ? Workshop.fromJson(json['workshop']) : null;
   }
 
@@ -964,27 +965,27 @@ class Vehicle {
       this.updatedAt});
 
   Vehicle.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    engineNo = json['engine_no'];
-    chassisNo = json['chassis_no'];
-    millage = json['millage'];
-    horsePower = json['horse_power'];
-    colorId = json['color_id'];
-    model = json['model'];
-    licenseName = json['license_name'];
-    licenseNo = json['license_no'];
-    licenseExpiry = json['license_expiry'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    engineNo = readString(json['engine_no']);
+    chassisNo = readString(json['chassis_no']);
+    millage = readString(json['millage']);
+    horsePower = readString(json['horse_power']);
+    colorId = readInt(json['color_id'], field: 'color_id');
+    model = readString(json['model']);
+    licenseName = readString(json['license_name']);
+    licenseNo = readString(json['license_no']);
+    licenseExpiry = readString(json['license_expiry']);
     policeStation = json['police_station'];
     ciaSsp = json['cia_ssp'];
     firNo = json['fir_no'];
     firDate = json['fir_date'];
     motorReg = json['motor_reg'];
-    isFinal = json['is_final'];
+    isFinal = readInt(json['is_final'], field: 'is_final');
     marketValue = json['market_value'];
     seatingCapacity = json['seating_capacity'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -1028,14 +1029,14 @@ class Labours {
   Labours({this.id, this.claimId, this.partId, this.rate, this.type, this.status, this.createdAt, this.updatedAt, this.part});
 
   Labours.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    partId = json['part_id'];
-    rate = json['rate'];
-    type = json['type'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    partId = readInt(json['part_id'], field: 'part_id');
+    rate = readString(json['rate']);
+    type = readString(json['type']);
     status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     part = json['part'] != null ? Part.fromJson(json['part']) : null;
   }
 
@@ -1101,25 +1102,25 @@ class PartDetails {
       this.part});
 
   PartDetails.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    partId = json['part_id'];
-    rate = json['rate'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    partId = readInt(json['part_id'], field: 'part_id');
+    rate = readString(json['rate']);
     provider = json['provider'];
-    gstPercentage = json['gst_percentage'];
-    gst = json['gst'];
-    salvagePercentage = json['salvage_percentage'];
-    salvage = json['salvage'];
-    depPercentage = json['dep_percentage'];
-    dep = json['dep'];
-    partNetAmount = json['part_net_amount'];
+    gstPercentage = readString(json['gst_percentage']);
+    gst = readString(json['gst']);
+    salvagePercentage = readString(json['salvage_percentage']);
+    salvage = readString(json['salvage']);
+    depPercentage = readString(json['dep_percentage']);
+    dep = readString(json['dep']);
+    partNetAmount = readString(json['part_net_amount']);
     partType = json['part_type'];
-    isSd = json['is_sd'];
-    type = json['type'];
+    isSd = readInt(json['is_sd'], field: 'is_sd');
+    type = readString(json['type']);
     status = json['status'];
     remarks = json['remarks'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     part = json['part'] != null ? Part.fromJson(json['part']) : null;
   }
 
@@ -1196,25 +1197,25 @@ class PlrPartDetails {
       this.part});
 
   PlrPartDetails.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    partId = json['part_id'];
-    rate = json['rate'];
-    provider = json['provider'];
-    gstPercentage = json['gst_percentage'];
-    gst = json['gst'];
-    salvagePercentage = json['salvage_percentage'];
-    salvage = json['salvage'];
-    depPercentage = json['dep_percentage'];
-    dep = json['dep'];
-    partNetAmount = json['part_net_amount'];
-    partType = json['part_type'];
-    isSd = json['is_sd'];
-    type = json['type'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    partId = readInt(json['part_id'], field: 'part_id');
+    rate = readString(json['rate']);
+    provider = readString(json['provider']);
+    gstPercentage = readString(json['gst_percentage']);
+    gst = readString(json['gst']);
+    salvagePercentage = readString(json['salvage_percentage']);
+    salvage = readString(json['salvage']);
+    depPercentage = readString(json['dep_percentage']);
+    dep = readString(json['dep']);
+    partNetAmount = readString(json['part_net_amount']);
+    partType = readString(json['part_type']);
+    isSd = readInt(json['is_sd'], field: 'is_sd');
+    type = readString(json['type']);
     status = json['status'];
     remarks = json['remarks'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     part = json['part'] != null ? Part.fromJson(json['part']) : null;
   }
 
@@ -1291,25 +1292,25 @@ class ThirdPartyParts {
       this.part});
 
   ThirdPartyParts.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    partId = json['part_id'];
-    rate = json['rate'];
-    provider = json['provider'];
-    gstPercentage = json['gst_percentage'];
-    gst = json['gst'];
-    salvagePercentage = json['salvage_percentage'];
-    salvage = json['salvage'];
-    depPercentage = json['dep_percentage'];
-    dep = json['dep'];
-    partNetAmount = json['part_net_amount'];
-    partType = json['part_type'];
-    isSd = json['is_sd'];
-    type = json['type'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    partId = readInt(json['part_id'], field: 'part_id');
+    rate = readString(json['rate']);
+    provider = readString(json['provider']);
+    gstPercentage = readString(json['gst_percentage']);
+    gst = readString(json['gst']);
+    salvagePercentage = readString(json['salvage_percentage']);
+    salvage = readString(json['salvage']);
+    depPercentage = readString(json['dep_percentage']);
+    dep = readString(json['dep']);
+    partNetAmount = readString(json['part_net_amount']);
+    partType = readString(json['part_type']);
+    isSd = readInt(json['is_sd'], field: 'is_sd');
+    type = readString(json['type']);
     status = json['status'];
     remarks = json['remarks'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     part = json['part'] != null ? Part.fromJson(json['part']) : null;
   }
 
@@ -1355,14 +1356,14 @@ class PlrLabours {
   PlrLabours({this.id, this.claimId, this.partId, this.rate, this.type, this.status, this.createdAt, this.updatedAt, this.part});
 
   PlrLabours.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    partId = json['part_id'];
-    rate = json['rate'];
-    type = json['type'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    partId = readInt(json['part_id'], field: 'part_id');
+    rate = readString(json['rate']);
+    type = readString(json['type']);
     status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     part = json['part'] != null ? Part.fromJson(json['part']) : null;
   }
 
@@ -1397,14 +1398,14 @@ class ThirdPartyLabours {
   ThirdPartyLabours({this.id, this.claimId, this.partId, this.rate, this.type, this.status, this.createdAt, this.updatedAt, this.part});
 
   ThirdPartyLabours.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    partId = json['part_id'];
-    rate = json['rate'];
-    type = json['type'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    partId = readInt(json['part_id'], field: 'part_id');
+    rate = readString(json['rate']);
+    type = readString(json['type']);
     status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     part = json['part'] != null ? Part.fromJson(json['part']) : null;
   }
 
@@ -1434,8 +1435,8 @@ class Part {
   Part({this.id, this.name, this.createdAt, this.updatedAt});
 
   Part.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
+    id = readInt(json['id'], field: 'id');
+    name = readString(json['name']);
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -1459,10 +1460,10 @@ class Workshop {
   Workshop({this.id, this.name, this.createdAt, this.updatedAt});
 
   Workshop.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -1484,10 +1485,10 @@ class InsuranceCompany {
   InsuranceCompany({this.id, this.name, this.createdAt, this.updatedAt});
 
   InsuranceCompany.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -1511,11 +1512,11 @@ class ClaimImages {
   ClaimImages({this.id, this.claimId, this.imageId, this.createdAt, this.updatedAt, this.image});
 
   ClaimImages.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    imageId = json['image_id'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    imageId = readInt(json['image_id'], field: 'image_id');
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     image = json['image'] != null ? ClaimImage.fromJson(json['image']) : null;
   }
 
@@ -1544,12 +1545,12 @@ class ClaimImage {
   ClaimImage({this.id, this.filename, this.path, this.createdAt, this.updatedAt, this.imageUrl});
 
   ClaimImage.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    filename = json['filename'];
-    path = json['path'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    imageUrl = json['image_url'];
+    id = readInt(json['id'], field: 'id');
+    filename = readString(json['filename']);
+    path = readString(json['path']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
+    imageUrl = readString(json['image_url']);
   }
 
   Map<String, dynamic> toJson() {
@@ -1577,13 +1578,13 @@ class DocumentImage {
   DocumentImage({this.id, this.claimId, this.imageId, this.documentId, this.type, this.createdAt, this.updatedAt, this.image});
 
   DocumentImage.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    imageId = json['image_id'];
-    documentId = json['document_id'];
-    type = json['type'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    imageId = readInt(json['image_id'], field: 'image_id');
+    documentId = readInt(json['document_id'], field: 'document_id');
+    type = readString(json['type']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     image = json['image'] != null ? ClaimImage.fromJson(json['image']) : null;
   }
 
@@ -1616,13 +1617,13 @@ class Comments {
   Comments({this.id, this.claimId, this.userId, this.message, this.sender, this.createdAt, this.updatedAt, this.user});
 
   Comments.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    userId = json['user_id'];
-    message = json['message'];
-    sender = json['sender'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    userId = readInt(json['user_id'], field: 'user_id');
+    message = readString(json['message']);
+    sender = readString(json['sender']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 
@@ -1669,16 +1670,16 @@ class User {
       this.userable});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userableType = json['userable_type'];
-    userableId = json['userable_id'];
-    roleId = json['role_id'];
-    zoneId = json['zone_id'];
-    username = json['username'];
-    isLoggedIn = json['is_logged_in'];
-    isLeader = json['is_leader'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    userableType = readString(json['userable_type']);
+    userableId = readInt(json['userable_id'], field: 'userable_id');
+    roleId = readInt(json['role_id'], field: 'role_id');
+    zoneId = readInt(json['zone_id'], field: 'zone_id');
+    username = readString(json['username']);
+    isLoggedIn = readInt(json['is_logged_in'], field: 'is_logged_in');
+    isLeader = readInt(json['is_leader'], field: 'is_leader');
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     userable = json['userable'] != null ? Surveyor.fromJson(json['userable']) : null;
   }
 
@@ -1728,17 +1729,17 @@ class Surveyor {
       this.updatedAt});
 
   Surveyor.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    zoneId = json['zone_id'];
-    fullName = json['full_name'];
-    phone = json['phone'];
-    email = json['email'];
-    address = json['address'];
-    cnicNo = json['cnic_no'];
-    joiningDate = json['joining_date'];
-    salary = json['salary'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    zoneId = readInt(json['zone_id'], field: 'zone_id');
+    fullName = readString(json['full_name']);
+    phone = readString(json['phone']);
+    email = readString(json['email']);
+    address = readString(json['address']);
+    cnicNo = readString(json['cnic_no']);
+    joiningDate = readString(json['joining_date']);
+    salary = readString(json['salary']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -1769,12 +1770,12 @@ class Documents {
   Documents({this.id, this.claimId, this.documentId, this.documentValue, this.createdAt, this.updatedAt});
 
   Documents.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    documentId = json['document_id'];
-    documentValue = json['document_value'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    documentId = readInt(json['document_id'], field: 'document_id');
+    documentValue = readInt(json['document_value'], field: 'document_value');
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -1846,32 +1847,32 @@ class ThirdPartyDetail {
         this.updatedAt});
 
   ThirdPartyDetail.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    ownerName = json['owner_name'];
-    ownerAddress = json['owner_address'];
-    placeOfInspection = json['place_of_inspection'];
-    estimatedLoss = json['estimated_loss'];
-    regNo = json['reg_no'];
-    engineNo = json['engine_no'];
-    chassisNo = json['chassis_no'];
-    horsePower = json['horse_power'];
-    makeId = json['make_id'];
-    model = json['model'];
-    driverName = json['driver_name'];
-    licenseNo = json['license_no'];
-    licenseExpiry = json['license_expiry'];
-    agreedLabor = json['agreed_labor'];
-    taxRate = json['tax_rate'];
-    taxAmount = json['tax_amount'];
-    grossAmount = json['gross_amount'];
-    totalParts = json['total_parts'];
-    totalDep = json['total_dep'];
-    totalSalvage = json['total_salvage'];
-    totalGst = json['total_gst'];
-    netTotal = json['net_total'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    ownerName = readString(json['owner_name']);
+    ownerAddress = readString(json['owner_address']);
+    placeOfInspection = readString(json['place_of_inspection']);
+    estimatedLoss = readString(json['estimated_loss']);
+    regNo = readString(json['reg_no']);
+    engineNo = readString(json['engine_no']);
+    chassisNo = readString(json['chassis_no']);
+    horsePower = readString(json['horse_power']);
+    makeId = readInt(json['make_id'], field: 'make_id');
+    model = readString(json['model']);
+    driverName = readString(json['driver_name']);
+    licenseNo = readString(json['license_no']);
+    licenseExpiry = readString(json['license_expiry']);
+    agreedLabor = readString(json['agreed_labor']);
+    taxRate = readString(json['tax_rate']);
+    taxAmount = readString(json['tax_amount']);
+    grossAmount = readString(json['gross_amount']);
+    totalParts = readString(json['total_parts']);
+    totalDep = readString(json['total_dep']);
+    totalSalvage = readString(json['total_salvage']);
+    totalGst = readString(json['total_gst']);
+    netTotal = readString(json['net_total']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -1916,11 +1917,11 @@ class VehicleMake {
   VehicleMake({this.id, this.tenantId, this.name, this.createdAt, this.updatedAt});
 
   VehicleMake.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    tenantId = json['tenant_id'];
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    tenantId = readInt(json['tenant_id'], field: 'tenant_id');
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {

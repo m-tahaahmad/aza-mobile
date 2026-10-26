@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:icms_app/Services/API/client_error_reporter.dart';
+import 'package:icms_app/utils/json_values.dart';
 import 'package:icms_app/Model/CustomersDataModel/customer_detail_response_model.dart';
 import 'package:icms_app/Model/LabourParts/plr_parts_involve_request_model.dart';
 import 'package:icms_app/Model/LabourParts/parts_involve_request_model.dart';
@@ -44,6 +46,7 @@ class _PartsInvolvesUIState extends State<PartsInvolvesUI> {
   List<PlrPartRequestDetails> requestList = [];
   bool isLoading = false;
   List<Part>? partsData;
+  String? _loadError;
 
   @override
   void initState() {
@@ -63,39 +66,60 @@ class _PartsInvolvesUIState extends State<PartsInvolvesUI> {
       partsInvolveProvider!.partDetails.clear();
     }
 
-    if (widget.comeFromThirdParty) {
-      for (final element in thirdPartyPartDetails ?? []) {
-        _preloadPart(element.part, element.partType, element);
+    try {
+      if (widget.comeFromThirdParty) {
+        for (final element in thirdPartyPartDetails ?? []) {
+          _preloadPart(element.part, element.partType, element);
+        }
+      } else if (HelperFunctions().usePlrAttributes()) {
+        for (final element in plrPartDetails ?? []) {
+          _preloadPart(element.part, element.partType, element);
+        }
+      } else {
+        for (final element in partDetails ?? []) {
+          _preloadPart(element.part, element.partType, element);
+        }
       }
-    } else if (HelperFunctions().usePlrAttributes()) {
-      for (final element in plrPartDetails ?? []) {
-        _preloadPart(element.part, element.partType, element);
-      }
-    } else {
-      for (final element in partDetails ?? []) {
-        _preloadPart(element.part, element.partType, element);
-      }
+
+      partsInvolveProvider!.calculateAmount();
+    } catch (error, stack) {
+      debugPrint('Parts preload failed: $error\n$stack');
+      ClientErrorReporter.report(
+        kind: ClientErrorKind.client,
+        userVisibleMessage: 'Failed to load parts details.',
+        originalMessage: error.toString(),
+        exceptionClass: error.runtimeType.toString(),
+        stackTrace: stack.toString(),
+      );
+      _loadError = 'Failed to load parts details.';
     }
 
-    partsInvolveProvider!.calculateAmount();
+    final unparsed = takeUnparsedNumberMessage();
+    if (unparsed != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        showSnackBar(context, unparsed);
+      });
+    }
   }
 
   void _preloadPart(Part? part, String? partType, dynamic element) {
+    final gstText = element.gst?.toString() ?? '';
     partsInvolveProvider!.addIntoTable(
       part: part,
       condition: partType,
-      depPercent: element.depPercentage != null ? int.parse(element.depPercentage!) : 0,
-      depPrice: element.dep != null ? int.parse(element.dep!) : 0,
-      salPercent: element.salvagePercentage != null ? int.parse(element.salvagePercentage!) : 0,
-      salPrice: element.salvage != null ? num.parse(element.salvage!).toInt() : 0,
-      gstPrice: element.gst != null ? int.parse(element.gst!).toInt() : 0,
-      price: element.rate != null ? int.parse(element.rate!) : 0,
-      subTotal: int.parse(element.partNetAmount!),
-      sd: element.isSd ?? 0,
+      depPercent: readIntOrZero(element.depPercentage, field: 'dep_percentage'),
+      depPrice: readIntOrZero(element.dep, field: 'dep'),
+      salPercent: readIntOrZero(element.salvagePercentage, field: 'salvage_percentage'),
+      salPrice: readIntOrZero(element.salvage, field: 'salvage'),
+      gstPrice: readIntOrZero(element.gst, field: 'gst'),
+      price: readIntOrZero(element.rate, field: 'rate'),
+      subTotal: readIntOrZero(element.partNetAmount, field: 'part_net_amount'),
+      sd: readIntOrZero(element.isSd, field: 'is_sd'),
       calculate: true,
     );
-    if (element.gst != null && element.gst!.isNotEmpty) {
-      partsInvolveProvider!.gstController.text = element.gstPercentage!;
+    if (gstText.trim().isNotEmpty) {
+      partsInvolveProvider!.gstController.text = readIntOrZero(element.gstPercentage, field: 'gst_percentage').toString();
     }
   }
 
@@ -173,7 +197,11 @@ class _PartsInvolvesUIState extends State<PartsInvolvesUI> {
         label: 'Depreciation %',
         controller: partsInvolveProvider!.partDepController,
         onDone: () {
-          partsInvolveProvider!.applyDep(partsInvolveProvider!.partDepController.text);
+          final applied = partsInvolveProvider!.applyDep(partsInvolveProvider!.partDepController.text);
+          if (!applied) {
+            showSnackBar(context, 'Enter a valid number');
+            return;
+          }
           setState(() {
             applyDep = partsInvolveProvider!.partDepController.text != '0' &&
                 partsInvolveProvider!.partDepController.text.isNotEmpty;
@@ -192,7 +220,11 @@ class _PartsInvolvesUIState extends State<PartsInvolvesUI> {
         label: 'Salvage %',
         controller: partsInvolveProvider!.salvageController,
         onDone: () {
-          partsInvolveProvider!.applySalvage(partsInvolveProvider!.salvageController.text);
+          final applied = partsInvolveProvider!.applySalvage(partsInvolveProvider!.salvageController.text);
+          if (!applied) {
+            showSnackBar(context, 'Enter a valid number');
+            return;
+          }
           setState(() {
             applySalvage = partsInvolveProvider!.salvageController.text != '0' &&
                 partsInvolveProvider!.salvageController.text.isNotEmpty;
@@ -314,9 +346,9 @@ class _PartsInvolvesUIState extends State<PartsInvolvesUI> {
 
   @override
   Widget build(BuildContext context) {
-    if (customerDetailData == null || partsInvolveProvider == null) {
-      return const SafeArea(
-        child: Center(child: Text('Failed to load parts details.')),
+    if (_loadError != null || customerDetailData == null || partsInvolveProvider == null) {
+      return SafeArea(
+        child: Center(child: Text(_loadError ?? 'Failed to load parts details.')),
       );
     }
 
@@ -378,9 +410,12 @@ class _PartsInvolvesUIState extends State<PartsInvolvesUI> {
                   provider: partsInvolveProvider!,
                   readOnly: partsFieldsReadOnly(),
                   onGstChanged: () {
-                    setState(() {
-                      partsInvolveProvider!.applyGst(partsInvolveProvider!.gstController.text);
-                    });
+                    final applied = partsInvolveProvider!.applyGst(partsInvolveProvider!.gstController.text);
+                    if (!applied) {
+                      showSnackBar(context, 'Enter a valid number');
+                      return;
+                    }
+                    setState(() {});
                   },
                 ),
               ],

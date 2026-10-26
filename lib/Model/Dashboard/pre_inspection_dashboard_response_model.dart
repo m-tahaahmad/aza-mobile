@@ -1,3 +1,5 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class PreInspectionDashboardResponseModel {
   bool? success;
   PreInspectionData? data;
@@ -30,9 +32,9 @@ class PreInspectionData {
   PreInspectionData({this.ack, this.insp, this.reports});
 
   PreInspectionData.fromJson(Map<String, dynamic> json) {
-    ack = json['new'];
-    insp = json['insp'];
-    reports = json['reports'];
+    ack = readInt(json['new'], field: 'new');
+    insp = readInt(json['insp'], field: 'insp');
+    reports = readInt(json['reports'], field: 'reports');
   }
 
   Map<String, dynamic> toJson() {

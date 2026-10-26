@@ -1,4 +1,5 @@
 import 'package:icms_app/Model/CustomersDataModel/customer_detail_response_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class PendingClaimResponseModel {
   bool? success;
@@ -172,31 +173,31 @@ class PendingClaimData {
       this.workshop});
 
   PendingClaimData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    employeeId = json['employee_id'];
+    id = readInt(json['id'], field: 'id');
+    employeeId = readInt(json['employee_id'], field: 'employee_id');
     zoneId = json['zone_id'];
-    intimationNo = json['intimation_no'];
+    intimationNo = readString(json['intimation_no']);
     intChannel = json['int_channel'];
     claimCity = json['claim_city'];
-    lossNo = json['loss_no'];
-    appNo = json['app_no'];
-    regNo = json['reg_no'];
+    lossNo = readString(json['loss_no']);
+    appNo = readString(json['app_no']);
+    regNo = readString(json['reg_no']);
     refNo = json['ref_no'];
-    claimTypeId = json['claim_type_id'];
-    makeId = json['make_id'];
-    surveyorId = json['surveyor_id'];
-    reInspSurveyorId = json['re_insp_surveyor_id'];
-    dateOfLoss = json['date_of_loss'];
-    intimationDate = json['intimation_date'];
+    claimTypeId = readInt(json['claim_type_id'], field: 'claim_type_id');
+    makeId = readInt(json['make_id'], field: 'make_id');
+    surveyorId = readInt(json['surveyor_id'], field: 'surveyor_id');
+    reInspSurveyorId = readInt(json['re_insp_surveyor_id'], field: 're_insp_surveyor_id');
+    dateOfLoss = readString(json['date_of_loss']);
+    intimationDate = readString(json['intimation_date']);
     surveyDate = json['survey_date'];
-    intimatedBy = json['intimated_by'];
-    intimatedAt = json['intimated_at'];
+    intimatedBy = readString(json['intimated_by']);
+    intimatedAt = readString(json['intimated_at']);
     reportBy = json['report_by'];
     reportAt = json['report_at'];
     assignedBy = json['assigned_by'];
     assignedAt = json['assigned_at'];
-    plrBy = json['plr_by'];
-    plrAt = json['plr_at'];
+    plrBy = readString(json['plr_by']);
+    plrAt = readString(json['plr_at']);
     remarks = json['remarks'];
     history = json['history'];
     priority = json['priority'];
@@ -204,40 +205,40 @@ class PendingClaimData {
     stageKey = json['stage_key']?.toString();
     isOverdue = json['is_overdue'] == true || json['is_overdue'] == 1;
     overdueColor = json['overdue_color']?.toString();
-    agreedLabour = json['agreed_labour'];
-    taxRate = json['tax_rate'];
-    taxAmount = json['tax_amount'];
-    grossAmount = json['gross_amount'];
-    plrAgreedLabour = json['plr_agreed_labour'];
-    plrTaxRate = json['plr_tax_rate'];
-    plrTaxAmount = json['plr_tax_amount'];
-    plrGrossAmount = json['plr_gross_amount'];
-    totalParts = json['total_parts'];
-    totalGst = json['total_gst'];
-    totalDep = json['total_dep'];
-    totalSalvage = json['total_salvage'];
-    plrTotalParts = json['plr_total_parts'];
-    plrTotalGst = json['plr_total_gst'];
-    plrTotalDep = json['plr_total_dep'];
-    plrTotalSalvage = json['plr_total_salvage'];
-    netTotal = json['net_total'];
-    plrNetTotal = json['plr_net_total'];
+    agreedLabour = readString(json['agreed_labour']);
+    taxRate = readString(json['tax_rate']);
+    taxAmount = readString(json['tax_amount']);
+    grossAmount = readString(json['gross_amount']);
+    plrAgreedLabour = readString(json['plr_agreed_labour']);
+    plrTaxRate = readString(json['plr_tax_rate']);
+    plrTaxAmount = readString(json['plr_tax_amount']);
+    plrGrossAmount = readString(json['plr_gross_amount']);
+    totalParts = readString(json['total_parts']);
+    totalGst = readString(json['total_gst']);
+    totalDep = readString(json['total_dep']);
+    totalSalvage = readString(json['total_salvage']);
+    plrTotalParts = readString(json['plr_total_parts']);
+    plrTotalGst = readString(json['plr_total_gst']);
+    plrTotalDep = readString(json['plr_total_dep']);
+    plrTotalSalvage = readString(json['plr_total_salvage']);
+    netTotal = readString(json['net_total']);
+    plrNetTotal = readString(json['plr_net_total']);
     circumstances = json['circumstances'];
-    isChequeReceived = json['is_cheque_received'];
-    isSubmitted = json['is_submitted'];
-    isSettled = json['is_settled'];
-    isReinspection = json['is_reinspection'];
-    isReferredBack = json['is_referred_back'];
-    isCustomer = json['is_customer'];
-    isDriver = json['is_driver'];
-    isFirstInspPics = json['is_first_insp_pics'];
-    isReInspPics = json['is_re_insp_pics'];
-    isLabor = json['is_labor'];
-    isParts = json['is_parts'];
-    isFirstInspDocs = json['is_first_insp_docs'];
-    isReInspDocs = json['is_re_insp_docs'];
-    isComments = json['is_comments'];
-    isReInspComment = json['is_re_insp_comment'];
+    isChequeReceived = readInt(json['is_cheque_received'], field: 'is_cheque_received');
+    isSubmitted = readInt(json['is_submitted'], field: 'is_submitted');
+    isSettled = readInt(json['is_settled'], field: 'is_settled');
+    isReinspection = readInt(json['is_reinspection'], field: 'is_reinspection');
+    isReferredBack = readInt(json['is_referred_back'], field: 'is_referred_back');
+    isCustomer = readInt(json['is_customer'], field: 'is_customer');
+    isDriver = readInt(json['is_driver'], field: 'is_driver');
+    isFirstInspPics = readInt(json['is_first_insp_pics'], field: 'is_first_insp_pics');
+    isReInspPics = readInt(json['is_re_insp_pics'], field: 'is_re_insp_pics');
+    isLabor = readInt(json['is_labor'], field: 'is_labor');
+    isParts = readInt(json['is_parts'], field: 'is_parts');
+    isFirstInspDocs = readInt(json['is_first_insp_docs'], field: 'is_first_insp_docs');
+    isReInspDocs = readInt(json['is_re_insp_docs'], field: 'is_re_insp_docs');
+    isComments = readInt(json['is_comments'], field: 'is_comments');
+    isReInspComment = readInt(json['is_re_insp_comment'], field: 'is_re_insp_comment');
     claimType = json['claim_type'] != null ? ClaimType.fromJson(json['claim_type']) : null;
     policy = json['policy'] != null ? Policy.fromJson(json['policy']) : null;
     workshop = json['workshop'] != null ? WorkshopDetail.fromJson(json['workshop']) : null;
@@ -333,10 +334,10 @@ class ClaimType {
   ClaimType({this.id, this.name, this.createdAt, this.updatedAt});
 
   ClaimType.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -414,34 +415,34 @@ class Policy {
       this.insuranceCompanyBranch});
 
   Policy.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
     intPerson = json['int_person'];
-    insuranceCompanyId = json['insurance_company_id'];
-    insuranceCompanyBranchId = json['insurance_company_branch_id'];
-    isWindow = json['is_window'];
-    policyNo = json['policy_no'];
+    insuranceCompanyId = readInt(json['insurance_company_id'], field: 'insurance_company_id');
+    insuranceCompanyBranchId = readInt(json['insurance_company_branch_id'], field: 'insurance_company_branch_id');
+    isWindow = readInt(json['is_window'], field: 'is_window');
+    policyNo = readString(json['policy_no']);
     certificateNo = json['certificate_no'];
     sumInsured = json['sum_insured'];
     deductible = json['deductible'];
     endrosmentNo = json['endrosment_no'];
-    expiryDate = json['expiry_date'];
+    expiryDate = readString(json['expiry_date']);
     underInsuranceValue = json['under_insurance_value'];
     underInsurancePercentage = json['under_insurance_percentage'];
     excess = json['excess'];
     marketValue = json['market_value'];
-    insuredName = json['insured_name'];
-    insuredCnic = json['insured_cnic'];
-    insuredAddress = json['insured_address'];
-    cityId = json['city_id'];
-    insuredContact = json['insured_contact'];
-    bankId = json['bank_id'];
-    bankCityId = json['bank_city_id'];
+    insuredName = readString(json['insured_name']);
+    insuredCnic = readString(json['insured_cnic']);
+    insuredAddress = readString(json['insured_address']);
+    cityId = readInt(json['city_id'], field: 'city_id');
+    insuredContact = readString(json['insured_contact']);
+    bankId = readInt(json['bank_id'], field: 'bank_id');
+    bankCityId = readInt(json['bank_city_id'], field: 'bank_city_id');
     regNo = json['reg_no'];
     surveyDate = json['survey_date'];
     lossNo = json['loss_no'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     insuranceCompany = json['insurance_company'] != null ? ClaimType.fromJson(json['insurance_company']) : null;
     insuranceCompanyBranch = json['insurance_company_branch'] != null ? InsuranceCompanyBranch.fromJson(json['insurance_company_branch']) : null;
   }
@@ -496,11 +497,11 @@ class InsuranceCompanyBranch {
   InsuranceCompanyBranch({this.id, this.companyId, this.name, this.createdAt, this.updatedAt});
 
   InsuranceCompanyBranch.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    companyId = json['company_id'];
-    name = json['name'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = readInt(json['id'], field: 'id');
+    companyId = readInt(json['company_id'], field: 'company_id');
+    name = readString(json['name']);
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
@@ -559,25 +560,25 @@ class WorkshopDetail {
       this.workshop});
 
   WorkshopDetail.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    claimId = json['claim_id'];
-    workshopId = json['workshop_id'];
-    placeOfSurvey = json['place_of_survey'];
-    sameAsWorkshop = json['same_as_workshop'];
-    placeOfLoss = json['place_of_loss'];
+    id = readInt(json['id'], field: 'id');
+    claimId = readInt(json['claim_id'], field: 'claim_id');
+    workshopId = readInt(json['workshop_id'], field: 'workshop_id');
+    placeOfSurvey = readString(json['place_of_survey']);
+    sameAsWorkshop = readString(json['same_as_workshop']);
+    placeOfLoss = readString(json['place_of_loss']);
     billNo = json['bill_no'];
     invoiceDate = json['invoice_date'];
-    lossAmount = json['loss_amount'];
+    lossAmount = readString(json['loss_amount']);
     lumpSumpAmount = json['lump_sump_amount'];
     estimateDate = json['estimate_date'];
     settlementDate = json['settlement_date'];
     reInspDate = json['re_insp_date'];
     docReceiveDate = json['doc_receive_date'];
     paymentBy = json['payment_by'];
-    isLabourSettled = json['is_labour_settled'];
+    isLabourSettled = readInt(json['is_labour_settled'], field: 'is_labour_settled');
     remarks = json['remarks'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = readString(json['created_at']);
+    updatedAt = readString(json['updated_at']);
     workshop = json['workshop'] != null ? Workshop.fromJson(json['workshop']) : null;
   }
 

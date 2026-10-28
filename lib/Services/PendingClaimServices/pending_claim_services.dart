@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icms_app/Model/PendingClaims/pending_claim_response_model.dart';
+import 'package:icms_app/Services/API/client_error_reporter.dart';
 import 'package:icms_app/constants/globals.dart';
 import 'package:provider/provider.dart';
 
@@ -33,8 +34,16 @@ class PendingClaimServices {
       return ApiResponse.error('Server Not Available');
     } on FetchDataException {
       return ApiResponse.error('An Error occurred while Fetching the Data');
-    } catch (e) {
-      return ApiResponse.error(e.toString());
+    } catch (e, stack) {
+      debugPrint('Claims failed: $e\n$stack');
+      ClientErrorReporter.report(
+        kind: ClientErrorKind.client,
+        userVisibleMessage: 'Failed to load claims.',
+        originalMessage: e.toString(),
+        exceptionClass: e.runtimeType.toString(),
+        stackTrace: stack.toString(),
+      );
+      return ApiResponse.error('Failed to load claims.');
     }
   }
 }

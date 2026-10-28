@@ -9,7 +9,7 @@ class PreInspectionDashboardResponseModel {
 
   PreInspectionDashboardResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'] != null ? PreInspectionData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], PreInspectionData.fromJson, field: 'data');
     error = json['error'];
   }
 

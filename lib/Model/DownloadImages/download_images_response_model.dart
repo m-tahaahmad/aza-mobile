@@ -8,7 +8,9 @@ class DownloadImagesListModel {
   DownloadImagesListModel.fromJsonList(List<dynamic> jsonList) {
     List<DownloadImagesDataModel> list = <DownloadImagesDataModel>[];
     for (var element in jsonList) {
-      list.add(DownloadImagesDataModel.fromJson(element));
+      final map = readJsonMap(element, field: 'images');
+      if (map == null) continue;
+      list.add(DownloadImagesDataModel.fromJson(map));
     }
     imagesList = list;
   }

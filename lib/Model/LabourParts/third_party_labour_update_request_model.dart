@@ -1,4 +1,5 @@
 import 'plr_labour_request_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class ThirdPartyLaborUpdateRequestModel {
   ThirdPartyLaborUpdateData? data;
@@ -6,7 +7,7 @@ class ThirdPartyLaborUpdateRequestModel {
   ThirdPartyLaborUpdateRequestModel({this.data});
 
   ThirdPartyLaborUpdateRequestModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? ThirdPartyLaborUpdateData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], ThirdPartyLaborUpdateData.fromJson, field: 'data');
   }
 
   Map<String, dynamic> toJson() {
@@ -25,12 +26,9 @@ class ThirdPartyLaborUpdateData {
   ThirdPartyLaborUpdateData({this.thirdPartyDetail, this.thirdPartyLabours});
 
   ThirdPartyLaborUpdateData.fromJson(Map<String, dynamic> json) {
-    thirdPartyDetail = json['third_party_detail'] != null ? ThirdPartyLaborDetail.fromJson(json['third_party_detail']) : null;
+    thirdPartyDetail = readJsonObject(json['third_party_detail'], ThirdPartyLaborDetail.fromJson, field: 'third_party_detail');
     if (json['third_party_labours'] != null) {
-      thirdPartyLabours = <PlrLabours>[];
-      json['third_party_labours'].forEach((v) {
-        thirdPartyLabours!.add(PlrLabours.fromJson(v));
-      });
+      thirdPartyLabours = readJsonList(json['third_party_labours'], PlrLabours.fromJson, field: 'third_party_labours');
     }
   }
 

@@ -9,7 +9,7 @@ class PublicSettingsResponseModel {
 
   PublicSettingsResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'] != null ? PublicSettingsData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], PublicSettingsData.fromJson, field: 'data');
     error = json['error'];
   }
 
@@ -47,9 +47,7 @@ class PublicSettingsData {
     secondaryColor = readString(json['secondary_color']);
     claimDetailBgColor = readString(json['claim_detail_bg_color']);
     organizationName = readString(json['organization_name']);
-    claimStageColors = json['claim_stage_colors'] != null
-        ? ClaimStageColors.fromJson(json['claim_stage_colors'])
-        : null;
+    claimStageColors = readJsonObject(json['claim_stage_colors'], ClaimStageColors.fromJson, field: 'claim_stage_colors');
   }
 
   Map<String, dynamic> toJson() {
@@ -73,10 +71,7 @@ class ClaimStageColors {
 
   ClaimStageColors.fromJson(Map<String, dynamic> json) {
     if (json['stages'] != null) {
-      stages = <ClaimStage>[];
-      json['stages'].forEach((v) {
-        stages!.add(ClaimStage.fromJson(v));
-      });
+      stages = readJsonList(json['stages'], ClaimStage.fromJson, field: 'stages');
     }
   }
 

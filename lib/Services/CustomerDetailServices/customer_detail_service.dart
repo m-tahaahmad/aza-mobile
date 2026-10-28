@@ -48,7 +48,7 @@ class CustomerDetailService {
         exceptionClass: error.runtimeType.toString(),
         stackTrace: stack.toString(),
       );
-      return ApiResponse.error(error.toString());
+      return ApiResponse.error('Failed to load claim details.');
     }
   }
 }

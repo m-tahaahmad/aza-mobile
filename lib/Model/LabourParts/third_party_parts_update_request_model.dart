@@ -1,4 +1,5 @@
 import 'plr_parts_involve_request_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class ThirdPartyPartsUpdateRequestModel {
   ThirdPartyPartsUpdateData? data;
@@ -6,7 +7,7 @@ class ThirdPartyPartsUpdateRequestModel {
   ThirdPartyPartsUpdateRequestModel({this.data});
 
   ThirdPartyPartsUpdateRequestModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? ThirdPartyPartsUpdateData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], ThirdPartyPartsUpdateData.fromJson, field: 'data');
   }
 
   Map<String, dynamic> toJson() {
@@ -25,14 +26,9 @@ class ThirdPartyPartsUpdateData {
   ThirdPartyPartsUpdateData({this.thirdPartyDetail, this.thirdPartyParts});
 
   ThirdPartyPartsUpdateData.fromJson(Map<String, dynamic> json) {
-    thirdPartyDetail = json['third_party_detail'] != null
-        ? ThirdPartyPartsDetail.fromJson(json['third_party_detail'])
-        : null;
+    thirdPartyDetail = readJsonObject(json['third_party_detail'], ThirdPartyPartsDetail.fromJson, field: 'third_party_detail');
     if (json['third_party_parts'] != null) {
-      thirdPartyParts = <PlrPartRequestDetails>[];
-      json['third_party_parts'].forEach((v) {
-        thirdPartyParts!.add(PlrPartRequestDetails.fromJson(v));
-      });
+      thirdPartyParts = readJsonList(json['third_party_parts'], PlrPartRequestDetails.fromJson, field: 'third_party_parts');
     }
   }
 

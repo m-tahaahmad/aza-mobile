@@ -10,10 +10,7 @@ class AllWorkshopsModel {
   AllWorkshopsModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
-      data = <WorkshopsData>[];
-      json['data'].forEach((v) {
-        data!.add(WorkshopsData.fromJson(v));
-      });
+      data = readJsonList(json['data'], WorkshopsData.fromJson, field: 'data');
     }
     error = json['error'];
   }

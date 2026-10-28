@@ -1,10 +1,12 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class CommentRequestModel {
   CommentsRequestData? data;
 
   CommentRequestModel({this.data});
 
   CommentRequestModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? CommentsRequestData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], CommentsRequestData.fromJson, field: 'data');
   }
 
   Map<String, dynamic> toJson() {

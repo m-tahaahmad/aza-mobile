@@ -1,10 +1,12 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class ThirdPartyCDUpdateRequestModel {
   ThirdPartyUpdateData? data;
 
   ThirdPartyCDUpdateRequestModel({this.data});
 
   ThirdPartyCDUpdateRequestModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? ThirdPartyUpdateData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], ThirdPartyUpdateData.fromJson, field: 'data');
   }
 
   Map<String, dynamic> toJson() {
@@ -22,9 +24,7 @@ class ThirdPartyUpdateData {
   ThirdPartyUpdateData({this.thirdPartyDetail});
 
   ThirdPartyUpdateData.fromJson(Map<String, dynamic> json) {
-    thirdPartyDetail = json['third_party_detail'] != null
-        ? ThirdPartyUpdateDetail.fromJson(json['third_party_detail'])
-        : null;
+    thirdPartyDetail = readJsonObject(json['third_party_detail'], ThirdPartyUpdateDetail.fromJson, field: 'third_party_detail');
   }
 
   Map<String, dynamic> toJson() {

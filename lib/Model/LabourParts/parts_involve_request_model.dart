@@ -1,4 +1,5 @@
 import 'plr_parts_involve_request_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class PartsInvolveRequestModel {
   DataPartsInvolve? data;
@@ -6,7 +7,7 @@ class PartsInvolveRequestModel {
   PartsInvolveRequestModel({this.data});
 
   PartsInvolveRequestModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? DataPartsInvolve.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], DataPartsInvolve.fromJson, field: 'data');
   }
 
   Map<String, dynamic> toJson() {
@@ -35,10 +36,7 @@ class DataPartsInvolve {
     totalSalvage = json['total_salvage'];
     netTotal = json['net_total'];
     if (json['part_details'] != null) {
-      partDetails = <PlrPartRequestDetails>[];
-      json['part_details'].forEach((v) {
-        partDetails!.add(PlrPartRequestDetails.fromJson(v));
-      });
+      partDetails = readJsonList(json['part_details'], PlrPartRequestDetails.fromJson, field: 'part_details');
     }
   }
 

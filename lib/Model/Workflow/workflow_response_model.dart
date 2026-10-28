@@ -6,7 +6,7 @@ class WorkflowResponseModel {
   WorkflowResponseModel({this.data});
 
   WorkflowResponseModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? WorkflowData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], WorkflowData.fromJson, field: 'data');
   }
 
   Map<String, dynamic> toJson() {

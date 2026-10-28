@@ -9,7 +9,7 @@ class DashboardResponseModel {
 
   DashboardResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'] != null ? DashboardData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], DashboardData.fromJson, field: 'data');
     error = json['error'];
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:icms_app/Model/DocumentsModel/document_response_model.dart';
 import 'package:icms_app/Providers/DocumentsProvider/documents_provider.dart';
+import 'package:icms_app/Services/API/client_error_reporter.dart';
 import 'package:provider/provider.dart';
 
 import '../API/api.dart';
@@ -30,8 +31,16 @@ class DocumentService {
       return ApiResponse.error('Server Not Available');
     } on FetchDataException {
       return ApiResponse.error('An Error occurred while Fetching the Data');
-    } catch (e) {
-      return ApiResponse.error(e.toString());
+    } catch (e, stack) {
+      debugPrint('Documents failed: $e\n$stack');
+      ClientErrorReporter.report(
+        kind: ClientErrorKind.client,
+        userVisibleMessage: 'Failed to load documents.',
+        originalMessage: e.toString(),
+        exceptionClass: e.runtimeType.toString(),
+        stackTrace: stack.toString(),
+      );
+      return ApiResponse.error('Failed to load documents.');
     }
   }
 }

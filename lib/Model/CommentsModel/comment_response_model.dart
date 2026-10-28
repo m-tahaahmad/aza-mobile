@@ -1,4 +1,5 @@
 import 'package:icms_app/Model/CustomersDataModel/customer_detail_response_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class CommentResponseModel {
   bool? success;
@@ -9,7 +10,7 @@ class CommentResponseModel {
 
   CommentResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'] != null ? Comments.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], Comments.fromJson, field: 'data');
     error = json['error'];
   }
 

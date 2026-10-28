@@ -10,10 +10,7 @@ class DocumentResponseModel {
   DocumentResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
-      data = <DocumentData>[];
-      json['data'].forEach((v) {
-        data!.add(DocumentData.fromJson(v));
-      });
+      data = readJsonList(json['data'], DocumentData.fromJson, field: 'data');
     }
     error = json['error'];
   }

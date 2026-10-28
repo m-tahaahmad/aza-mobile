@@ -1,10 +1,12 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class CustomerDetailRequestModel {
   CustomerRequestData? data;
 
   CustomerDetailRequestModel({this.data});
 
   CustomerDetailRequestModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? CustomerRequestData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], CustomerRequestData.fromJson, field: 'data');
   }
 
   Map<String, dynamic> toJson() {
@@ -25,8 +27,8 @@ class CustomerRequestData {
 
   CustomerRequestData.fromJson(Map<String, dynamic> json) {
     claimTypeId = json['claim_type_id'];
-    policy = json['policy'] != null ? UpdatePolicy.fromJson(json['policy']) : null;
-    workshop = json['workshop'] != null ? UpdateWorkshop.fromJson(json['workshop']) : null;
+    policy = readJsonObject(json['policy'], UpdatePolicy.fromJson, field: 'policy');
+    workshop = readJsonObject(json['workshop'], UpdateWorkshop.fromJson, field: 'workshop');
   }
 
   Map<String, dynamic> toJson() {

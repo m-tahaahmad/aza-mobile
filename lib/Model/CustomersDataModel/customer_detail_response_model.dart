@@ -10,8 +10,8 @@ class CustomerDetailResponseModel {
 
   CustomerDetailResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'] != null ? CustomerDetailData.fromJson(json['data']) : null;
-    error = json['error'] != null ? ErrorModel.fromJson(json['error']) : null;
+    data = readJsonObject(json['data'], CustomerDetailData.fromJson, field: 'data');
+    error = readJsonObject(json['error'], ErrorModel.fromJson, field: 'error');
   }
 
   Map<String, dynamic> toJson() {
@@ -293,97 +293,55 @@ class CustomerDetailData {
     employee = json['employee'];
     insuredSince = readString(json['insured_since']);
     previousClaims = readString(json['previous_claims']);
-    surveyor = json['surveyor'] != null ? Surveyor.fromJson(json['surveyor']) : null;
-    claimType = json['claim_type'] != null ? ClaimType.fromJson(json['claim_type']) : null;
-    policy = json['policy'] != null ? Policy.fromJson(json['policy']) : null;
-    workshop = json['workshop'] != null ? WorkshopDetail.fromJson(json['workshop']) : null;
-    vehicle =
-    json['vehicle'] != null ? Vehicle.fromJson(json['vehicle']) : null;
+    surveyor = readJsonObject(json['surveyor'], Surveyor.fromJson, field: 'surveyor');
+    claimType = readJsonObject(json['claim_type'], ClaimType.fromJson, field: 'claim_type');
+    policy = readJsonObject(json['policy'], Policy.fromJson, field: 'policy');
+    workshop = readJsonObject(json['workshop'], WorkshopDetail.fromJson, field: 'workshop');
+    vehicle = readJsonObject(json['vehicle'], Vehicle.fromJson, field: 'vehicle');
     if (json['labours'] != null) {
-      labours = <Labours>[];
-      json['labours'].forEach((v) {
-        labours!.add(Labours.fromJson(v));
-      });
+      labours = readJsonList(json['labours'], Labours.fromJson, field: 'labours');
     }
     if (json['part_details'] != null) {
-      partDetails = <PartDetails>[];
-      json['part_details'].forEach((v) {
-        partDetails!.add(PartDetails.fromJson(v));
-      });
+      partDetails = readJsonList(json['part_details'], PartDetails.fromJson, field: 'part_details');
     }
     if (json['plr_labours'] != null) {
-      plrLabours = <PlrLabours>[];
-      json['plr_labours'].forEach((v) {
-        plrLabours!.add(PlrLabours.fromJson(v));
-      });
+      plrLabours = readJsonList(json['plr_labours'], PlrLabours.fromJson, field: 'plr_labours');
     }
     if (json['plr_part_details'] != null) {
-      plrPartDetails = <PlrPartDetails>[];
-      json['plr_part_details'].forEach((v) {
-        plrPartDetails!.add(PlrPartDetails.fromJson(v));
-      });
+      plrPartDetails = readJsonList(json['plr_part_details'], PlrPartDetails.fromJson, field: 'plr_part_details');
     }
     if (json['inspection_images'] != null) {
-      inspectionImages = <ClaimImages>[];
-      json['inspection_images'].forEach((v) {
-        inspectionImages!.add(ClaimImages.fromJson(v));
-      });
+      inspectionImages = readJsonList(json['inspection_images'], ClaimImages.fromJson, field: 'inspection_images');
     }
     if (json['re_inspection_images'] != null) {
-      reInspectionImages = <ClaimImages>[];
-      json['re_inspection_images'].forEach((v) {
-        reInspectionImages!.add(ClaimImages.fromJson(v));
-      });
+      reInspectionImages = readJsonList(json['re_inspection_images'], ClaimImages.fromJson, field: 're_inspection_images');
     }
     if (json['sd_images'] != null) {
-      sdImages = <ClaimImages>[];
-      json['sd_images'].forEach((v) {
-        sdImages!.add(ClaimImages.fromJson(v));
-      });
+      sdImages = readJsonList(json['sd_images'], ClaimImages.fromJson, field: 'sd_images');
     }
     if (json['pre_inspection_images'] != null) {
-      preInspectionImages = <ClaimImages>[];
-      json['pre_inspection_images'].forEach((v) {
-        preInspectionImages!.add(ClaimImages.fromJson(v));
-      });
+      preInspectionImages = readJsonList(json['pre_inspection_images'], ClaimImages.fromJson, field: 'pre_inspection_images');
     }
     if (json['doc_images'] != null) {
-      docImages = <DocumentImage>[];
-      json['doc_images'].forEach((v) {
-        docImages!.add(DocumentImage.fromJson(v));
-      });
+      docImages = readJsonList(json['doc_images'], DocumentImage.fromJson, field: 'doc_images');
     }
     approvalPic = json['approval_pic'];
     policyFile = json['policy_file'];
     if (json['comments'] != null) {
-      comments = <Comments>[];
-      json['comments'].forEach((v) {
-        comments!.add(Comments.fromJson(v));
-      });
+      comments = readJsonList(json['comments'], Comments.fromJson, field: 'comments');
     }
     if (json['documents'] != null) {
-      documents = <Documents>[];
-      json['documents'].forEach((v) {
-        documents!.add(Documents.fromJson(v));
-      });
+      documents = readJsonList(json['documents'], Documents.fromJson, field: 'documents');
     }
-    thirdPartyDetail = json['third_party_detail'] != null
-        ? ThirdPartyDetail.fromJson(json['third_party_detail'])
-        : null;
+    thirdPartyDetail = readJsonObject(json['third_party_detail'], ThirdPartyDetail.fromJson, field: 'third_party_detail');
     if (json['third_party_labours'] != null) {
-      thirdPartyLabours = <ThirdPartyLabours>[];
-      json['third_party_labours'].forEach((v) {
-        thirdPartyLabours!.add(ThirdPartyLabours.fromJson(v));
-      });
+      thirdPartyLabours = readJsonList(json['third_party_labours'], ThirdPartyLabours.fromJson, field: 'third_party_labours');
     }
     if (json['third_party_parts'] != null) {
-      thirdPartyParts = <ThirdPartyParts>[];
-      json['third_party_parts'].forEach((v) {
-        thirdPartyParts!.add(ThirdPartyParts.fromJson(v));
-      });
+      thirdPartyParts = readJsonList(json['third_party_parts'], ThirdPartyParts.fromJson, field: 'third_party_parts');
     }
-    vehicleMake = json['vehicle_make'] != null ? VehicleMake.fromJson(json['vehicle_make']) : null;
-    bill = json['bill'] != null ? Bill.fromJson(json['bill']) : null;
+    vehicleMake = readJsonObject(json['vehicle_make'], VehicleMake.fromJson, field: 'vehicle_make');
+    bill = readJsonObject(json['bill'], Bill.fromJson, field: 'bill');
   }
 
   Map<String, dynamic> toJson() {
@@ -750,9 +708,9 @@ class Policy {
     lossNo = json['loss_no'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    insuranceCompany = json['insurance_company'] != null ? InsuranceCompany.fromJson(json['insurance_company']) : null;
+    insuranceCompany = readJsonObject(json['insurance_company'], InsuranceCompany.fromJson, field: 'insurance_company');
     insuranceCompanyBranch =
-        json['insurance_company_branch'] != null ? InsuranceCompanyBranch.fromJson(json['insurance_company_branch']) : null;
+        readJsonObject(json['insurance_company_branch'], InsuranceCompanyBranch.fromJson, field: 'insurance_company_branch');
   }
 
   Map<String, dynamic> toJson() {
@@ -887,7 +845,7 @@ class WorkshopDetail {
     remarks = json['remarks'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    workshop = json['workshop'] != null ? Workshop.fromJson(json['workshop']) : null;
+    workshop = readJsonObject(json['workshop'], Workshop.fromJson, field: 'workshop');
   }
 
   Map<String, dynamic> toJson() {
@@ -1037,7 +995,7 @@ class Labours {
     status = json['status'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    part = json['part'] != null ? Part.fromJson(json['part']) : null;
+    part = readJsonObject(json['part'], Part.fromJson, field: 'part');
   }
 
   Map<String, dynamic> toJson() {
@@ -1121,7 +1079,7 @@ class PartDetails {
     remarks = json['remarks'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    part = json['part'] != null ? Part.fromJson(json['part']) : null;
+    part = readJsonObject(json['part'], Part.fromJson, field: 'part');
   }
 
   Map<String, dynamic> toJson() {
@@ -1216,7 +1174,7 @@ class PlrPartDetails {
     remarks = json['remarks'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    part = json['part'] != null ? Part.fromJson(json['part']) : null;
+    part = readJsonObject(json['part'], Part.fromJson, field: 'part');
   }
 
   Map<String, dynamic> toJson() {
@@ -1311,7 +1269,7 @@ class ThirdPartyParts {
     remarks = json['remarks'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    part = json['part'] != null ? Part.fromJson(json['part']) : null;
+    part = readJsonObject(json['part'], Part.fromJson, field: 'part');
   }
 
   Map<String, dynamic> toJson() {
@@ -1364,7 +1322,7 @@ class PlrLabours {
     status = json['status'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    part = json['part'] != null ? Part.fromJson(json['part']) : null;
+    part = readJsonObject(json['part'], Part.fromJson, field: 'part');
   }
 
   Map<String, dynamic> toJson() {
@@ -1406,7 +1364,7 @@ class ThirdPartyLabours {
     status = json['status'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    part = json['part'] != null ? Part.fromJson(json['part']) : null;
+    part = readJsonObject(json['part'], Part.fromJson, field: 'part');
   }
 
   Map<String, dynamic> toJson() {
@@ -1517,7 +1475,7 @@ class ClaimImages {
     imageId = readInt(json['image_id'], field: 'image_id');
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    image = json['image'] != null ? ClaimImage.fromJson(json['image']) : null;
+    image = readJsonObject(json['image'], ClaimImage.fromJson, field: 'image');
   }
 
   Map<String, dynamic> toJson() {
@@ -1585,7 +1543,7 @@ class DocumentImage {
     type = readString(json['type']);
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    image = json['image'] != null ? ClaimImage.fromJson(json['image']) : null;
+    image = readJsonObject(json['image'], ClaimImage.fromJson, field: 'image');
   }
 
   Map<String, dynamic> toJson() {
@@ -1624,7 +1582,7 @@ class Comments {
     sender = readString(json['sender']);
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    user = readJsonObject(json['user'], User.fromJson, field: 'user');
   }
 
   Map<String, dynamic> toJson() {
@@ -1680,7 +1638,7 @@ class User {
     isLeader = readInt(json['is_leader'], field: 'is_leader');
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    userable = json['userable'] != null ? Surveyor.fromJson(json['userable']) : null;
+    userable = readJsonObject(json['userable'], Surveyor.fromJson, field: 'userable');
   }
 
   Map<String, dynamic> toJson() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:icms_app/Model/VehicleMakeModel/vehicle_make_response_model.dart';
 import 'package:icms_app/Providers/VehicleMakeProvider/vehicle_make_provider.dart';
+import 'package:icms_app/Services/API/client_error_reporter.dart';
 import 'package:provider/provider.dart';
 
 import '../API/api.dart';
@@ -10,7 +11,9 @@ import '../API/app_exceptions.dart';
 class VehicleMakeService {
   Future<ApiResponse<VehicleMakeResponseModel>> getAllVehicleMake(BuildContext context) async {
     try {
-      var response = await Api.getRequestData("vehicle-make", context);
+      // This index paginates by default. There is no separate mobile route,
+      // so the full list is requested with pagination turned off.
+      var response = await Api.getRequestData("vehicle-make?pagination=false", context);
       VehicleMakeResponseModel responseModel = VehicleMakeResponseModel.fromJson(response);
       if (!context.mounted) return ApiResponse.completed(responseModel);
       Provider.of<VehicleMakeProvider>(context, listen: false).setVehicleMake = responseModel;
@@ -29,8 +32,16 @@ class VehicleMakeService {
       return ApiResponse.error('Server Not Available');
     } on FetchDataException {
       return ApiResponse.error('An Error occurred while Fetching the Data');
-    } catch (e) {
-      return ApiResponse.error(e.toString());
+    } catch (e, stack) {
+      debugPrint('Vehicle makes failed: $e\n$stack');
+      ClientErrorReporter.report(
+        kind: ClientErrorKind.client,
+        userVisibleMessage: 'Failed to load vehicle makes.',
+        originalMessage: e.toString(),
+        exceptionClass: e.runtimeType.toString(),
+        stackTrace: stack.toString(),
+      );
+      return ApiResponse.error('Failed to load vehicle makes.');
     }
   }
 }

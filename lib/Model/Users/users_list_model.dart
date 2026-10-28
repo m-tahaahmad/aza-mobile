@@ -1,4 +1,5 @@
 import '../Auth/login_request_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class UsersListModel {
   List<LoginRequestModel>? data;
@@ -7,10 +8,7 @@ class UsersListModel {
 
   UsersListModel.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = <LoginRequestModel>[];
-      json['data'].forEach((v) {
-        data!.add(LoginRequestModel.fromJson(v));
-      });
+      data = readJsonList(json['data'], LoginRequestModel.fromJson, field: 'data');
     }
   }
 

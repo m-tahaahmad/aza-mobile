@@ -10,10 +10,7 @@ class VehicleMakeResponseModel {
   VehicleMakeResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
-      data = <VehicleMakeData>[];
-      json['data'].forEach((v) {
-        data!.add(VehicleMakeData.fromJson(v));
-      });
+      data = readJsonList(json['data'], VehicleMakeData.fromJson, field: 'data');
     }
     error = json['error'];
   }

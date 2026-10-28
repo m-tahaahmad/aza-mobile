@@ -1,10 +1,12 @@
+import 'package:icms_app/utils/json_values.dart';
+
 class PLRLabourRequestModel {
   PLRLabourRequestData? data;
 
   PLRLabourRequestModel({this.data});
 
   PLRLabourRequestModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? PLRLabourRequestData.fromJson(json['data']) : null;
+    data = readJsonObject(json['data'], PLRLabourRequestData.fromJson, field: 'data');
   }
 
   Map<String, dynamic> toJson() {
@@ -33,10 +35,7 @@ class PLRLabourRequestData {
     plrTaxAmount = json['plr_tax_amount'];
     plrGrossAmount = json['plr_gross_amount'];
     if (json['plr_labours'] != null) {
-      plrLabours = <PlrLabours>[];
-      json['plr_labours'].forEach((v) {
-        plrLabours!.add(PlrLabours.fromJson(v));
-      });
+      plrLabours = readJsonList(json['plr_labours'], PlrLabours.fromJson, field: 'plr_labours');
     }
   }
 

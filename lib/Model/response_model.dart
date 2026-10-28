@@ -11,7 +11,7 @@ class ResponseModel {
   ResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     data = readString(json['data']);
-    error = json['error'] != null ? ErrorModel.fromJson(json['error']) : null;
+    error = readJsonObject(json['error'], ErrorModel.fromJson, field: 'error');
   }
 
   Map<String, dynamic> toJson() {

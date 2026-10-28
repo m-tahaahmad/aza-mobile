@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:icms_app/Model/WorkshopsModel/all_workshops_model.dart';
+import 'package:icms_app/Services/API/client_error_reporter.dart';
 import 'package:provider/provider.dart';
 import '../../Providers/WorkshopsProvider/workshops_provider.dart';
 import '../API/api.dart';
@@ -7,10 +8,6 @@ import '../API/api_response.dart';
 import '../API/app_exceptions.dart';
 
 class WorkshopService {
-  Future<ApiResponse<AllWorkshopsModel>> getAllWorkshops(BuildContext context) async {
-    return _fetchWorkshops(context, 'workshop');
-  }
-
   Future<ApiResponse<AllWorkshopsModel>> getWorkshopsByZone(BuildContext context, String zoneId) async {
     final trimmedZoneId = zoneId.trim();
     if (trimmedZoneId.isEmpty) {
@@ -43,8 +40,16 @@ class WorkshopService {
       return ApiResponse.error('Server Not Available');
     } on FetchDataException {
       return ApiResponse.error('An Error occurred while Fetching the Data');
-    } catch (e) {
-      return ApiResponse.error(e.toString());
+    } catch (e, stack) {
+      debugPrint('Workshops failed: $e\n$stack');
+      ClientErrorReporter.report(
+        kind: ClientErrorKind.client,
+        userVisibleMessage: 'Failed to load workshops.',
+        originalMessage: e.toString(),
+        exceptionClass: e.runtimeType.toString(),
+        stackTrace: stack.toString(),
+      );
+      return ApiResponse.error('Failed to load workshops.');
     }
   }
 }

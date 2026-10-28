@@ -1,4 +1,5 @@
 import '../CustomersDataModel/customer_detail_response_model.dart';
+import 'package:icms_app/utils/json_values.dart';
 
 class LabourPartsResponseModel {
   bool? success;
@@ -10,10 +11,7 @@ class LabourPartsResponseModel {
   LabourPartsResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
-      data = <Part>[];
-      json['data'].forEach((v) {
-        data!.add(Part.fromJson(v));
-      });
+      data = readJsonList(json['data'], Part.fromJson, field: 'data');
     }
     error = json['error'];
   }

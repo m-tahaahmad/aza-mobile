@@ -10,8 +10,8 @@ class UserDataResponseModel {
 
   UserDataResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    data = json['data'] != null ? UserData.fromJson(json['data']) : null;
-    error = json['error'] != null ? ErrorModel.fromJson(json['error']) : null;
+    data = readJsonObject(json['data'], UserData.fromJson, field: 'data');
+    error = readJsonObject(json['error'], ErrorModel.fromJson, field: 'error');
   }
 
   Map<String, dynamic> toJson() {
@@ -45,7 +45,7 @@ class UserData {
   String? get token => accessToken;
 
   UserData.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    user = readJsonObject(json['user'], User.fromJson, field: 'user');
     accessToken = json['access_token'] ?? json['token'];
     refreshToken = readString(json['refresh_token']);
     expiresIn = readInt(json['expires_in'], field: 'expires_in');

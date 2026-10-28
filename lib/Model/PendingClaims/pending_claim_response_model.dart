@@ -11,10 +11,7 @@ class PendingClaimResponseModel {
   PendingClaimResponseModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
-      data = <PendingClaimData>[];
-      json['data'].forEach((v) {
-        data!.add(PendingClaimData.fromJson(v));
-      });
+      data = readJsonList(json['data'], PendingClaimData.fromJson, field: 'data');
     }
     error = json['error'];
   }
@@ -239,9 +236,9 @@ class PendingClaimData {
     isReInspDocs = readInt(json['is_re_insp_docs'], field: 'is_re_insp_docs');
     isComments = readInt(json['is_comments'], field: 'is_comments');
     isReInspComment = readInt(json['is_re_insp_comment'], field: 'is_re_insp_comment');
-    claimType = json['claim_type'] != null ? ClaimType.fromJson(json['claim_type']) : null;
-    policy = json['policy'] != null ? Policy.fromJson(json['policy']) : null;
-    workshop = json['workshop'] != null ? WorkshopDetail.fromJson(json['workshop']) : null;
+    claimType = readJsonObject(json['claim_type'], ClaimType.fromJson, field: 'claim_type');
+    policy = readJsonObject(json['policy'], Policy.fromJson, field: 'policy');
+    workshop = readJsonObject(json['workshop'], WorkshopDetail.fromJson, field: 'workshop');
   }
 
   Map<String, dynamic> toJson() {
@@ -443,8 +440,8 @@ class Policy {
     lossNo = json['loss_no'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    insuranceCompany = json['insurance_company'] != null ? ClaimType.fromJson(json['insurance_company']) : null;
-    insuranceCompanyBranch = json['insurance_company_branch'] != null ? InsuranceCompanyBranch.fromJson(json['insurance_company_branch']) : null;
+    insuranceCompany = readJsonObject(json['insurance_company'], ClaimType.fromJson, field: 'insurance_company');
+    insuranceCompanyBranch = readJsonObject(json['insurance_company_branch'], InsuranceCompanyBranch.fromJson, field: 'insurance_company_branch');
   }
 
   Map<String, dynamic> toJson() {
@@ -579,7 +576,7 @@ class WorkshopDetail {
     remarks = json['remarks'];
     createdAt = readString(json['created_at']);
     updatedAt = readString(json['updated_at']);
-    workshop = json['workshop'] != null ? Workshop.fromJson(json['workshop']) : null;
+    workshop = readJsonObject(json['workshop'], Workshop.fromJson, field: 'workshop');
   }
 
   Map<String, dynamic> toJson() {

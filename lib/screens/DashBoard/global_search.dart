@@ -104,7 +104,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
             ),
             Expanded(
               child: !hasSearched
-                  ? _emptyStateMessage('Search by claim number, registration or company')
+                  ? _emptyStateMessage('Search by claim number, registration, company or make')
                   : FutureBuilder<ApiResponse<PendingClaimResponseModel>>(
                       future: getPendingClaims,
                       builder: (context, snapshot) {

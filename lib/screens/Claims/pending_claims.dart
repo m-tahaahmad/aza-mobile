@@ -161,7 +161,7 @@ class _PendingClaimsScreenState extends State<PendingClaimsScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                           decoration: InputDecoration(
-                            hintText: 'Search claim, branch or plate',
+                            hintText: 'Search claim, branch, plate or make',
                             hintStyle: TextStyle(
                               fontSize: FontSizes.normalText2,
                               color: const Color(0xFF98A2B3),
@@ -204,7 +204,8 @@ class _PendingClaimsScreenState extends State<PendingClaimsScreen> {
                                   (element) =>
                                       (element.intimationNo ?? '').toLowerCase().contains(query) ||
                                       (element.regNo ?? '').toLowerCase().contains(query) ||
-                                      (element.policy?.insuranceCompany?.name ?? '').toLowerCase().contains(query),
+                                      (element.policy?.insuranceCompany?.name ?? '').toLowerCase().contains(query) ||
+                                      (element.vehicleMake?.name ?? '').toLowerCase().contains(query),
                                 )
                                 .toList();
                           }

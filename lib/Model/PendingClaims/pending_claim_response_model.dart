@@ -97,6 +97,7 @@ class PendingClaimData {
   int? isReInspComment;
   Policy? policy;
   WorkshopDetail? workshop;
+  VehicleMake? vehicleMake;
 
   PendingClaimData(
       {this.id,
@@ -167,7 +168,8 @@ class PendingClaimData {
       this.isReInspComment,
       this.claimType,
       this.policy,
-      this.workshop});
+      this.workshop,
+      this.vehicleMake});
 
   PendingClaimData.fromJson(Map<String, dynamic> json) {
     id = readInt(json['id'], field: 'id');
@@ -239,6 +241,7 @@ class PendingClaimData {
     claimType = readJsonObject(json['claim_type'], ClaimType.fromJson, field: 'claim_type');
     policy = readJsonObject(json['policy'], Policy.fromJson, field: 'policy');
     workshop = readJsonObject(json['workshop'], WorkshopDetail.fromJson, field: 'workshop');
+    vehicleMake = readJsonObject(json['vehicle_make'], VehicleMake.fromJson, field: 'vehicle_make');
   }
 
   Map<String, dynamic> toJson() {
@@ -317,6 +320,9 @@ class PendingClaimData {
     }
     if (workshop != null) {
       data['workshop'] = workshop!.toJson();
+    }
+    if (vehicleMake != null) {
+      data['vehicle_make'] = vehicleMake!.toJson();
     }
     return data;
   }

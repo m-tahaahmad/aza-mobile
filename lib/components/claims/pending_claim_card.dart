@@ -33,6 +33,8 @@ class PendingClaimCard extends StatelessWidget {
     final workshop = claim.workshop?.workshop?.name?.toString().isNotEmpty == true
         ? claim.workshop!.workshop!.name.toString()
         : 'Not assigned';
+    final makeName = claim.vehicleMake?.name?.trim();
+    final make = makeName != null && makeName.isNotEmpty ? makeName : null;
     final stageKey = claim.stageKey?.trim();
     final statusFallback = claim.status?.toString().trim();
     final showBadge = showStageBadge &&
@@ -154,6 +156,13 @@ class PendingClaimCard extends StatelessWidget {
                   ),
                 ],
               ),
+              if (make != null) ...[
+                SizedBox(height: 12.h),
+                _detailCell(
+                  label: 'MAKE',
+                  value: make,
+                ),
+              ],
               SizedBox(height: 12.h),
               Row(
                 children: [
